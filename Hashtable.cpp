@@ -1,76 +1,37 @@
-#include <iostream>
-#include <assert.h>
-#include <list>
-#include <vector>
-#include <string>
-#include <algorithm>
-
-typedef std::string Key;
-
-struct Value {
-	unsigned age = 0;
-	unsigned weight = 0;
-};
-
-struct Tmp {
-	Key key;
-	Value val;
-};
-
-
-class HashTable{
-private:
-	unsigned static const defaultCapacity = 19;
-	std::vector<std::list<Tmp>> data;
-	size_t _size = 0;
-	size_t capacity;
-	size_t HashFoo (const Key& k) const;
-public:
-	HashTable();
-	~HashTable();
-
-	HashTable(unsigned);
-
-	// Обменивает значения двух хэш-таблиц.
-	// Подумайте, зачем нужен этот метод, при наличии стандартной функции
-	// std::swap.
-	void swap(HashTable& b);
-
-	HashTable& operator=(const HashTable& b);
-		
-	// Очищает контейнер.
-	void clear();
-	// Удаляет элемент по заданному ключу.
-	bool erase(const Key& k);
-	// Вставка в контейнер. Возвращаемое значение - успешность вставки.
-	bool insert(const Key& k, const Value& v);
-
-	// Проверка наличия значения по заданному ключу.
-	bool contains(const Key& k);
-
-	// Возвращает значение по ключу. Небезопасный метод.
-	// В случае отсутствия ключа в контейнере, следует вставить в контейнер
-	// значение, созданное конструктором по умолчанию и вернуть ссылку на него. 
-	struct Value& operator[](const Key& k);
-
-	// Возвращает значение по ключу. Бросает исключение при неудаче.
-	struct Value& at(const Key& k);
-	const struct Value& at(const Key& k) const;
-
-	size_t size() const;
-	bool empty() const;
-
-	friend bool operator==(HashTable & a, HashTable & b);
-	friend bool operator!=(HashTable & a, HashTable & b);
-};
-
+#include "Hashtable.hpp"
 
 
 size_t HashTable::HashFoo(const Key& k) const{
-	return 15 % capacity;
+	size_t hash = 0;
+	for (int i = 0; i < k.length(); ++i){
+		hash += (size_t)(k[i] - 'A'); 
+	}
+	return hash % capacity;
 }
 
-
+void HashTable::rehashing(){
+	std::vector<std::list<Tmp>> buf;
+	buf.resize(capacity, std::list<Tmp>());
+	std::copy(data.begin(), data.begin() + capacity, buf.begin());
+	data.clear();
+	_size = 0;
+	if (capacity > (UINT_MAX / 2)){
+		capacity = UINT_MAX;
+	}
+	else {
+		capacity *= 2;	
+	}
+	data.resize(capacity, std::list<Tmp>());
+	for (size_t i = 0; i < (capacity / 2); ++i){
+		std::list<Tmp>& lst = buf.at(i);
+		if (!lst.empty()){
+			for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
+				insert(it->key, it->val);
+			}
+		}	
+	}
+	buf.clear();
+}
 
 HashTable::HashTable(){
 	data.resize(defaultCapacity, std::list<Tmp>());
@@ -84,8 +45,11 @@ HashTable::~HashTable(){
 
 
 
-HashTable::HashTable(unsigned capacity){
+HashTable::HashTable(const HashTable& b){
+	capacity = b.capacity;
+	_size = b._size;
 	data.resize(capacity, std::list<Tmp>());
+	std::copy(b.data.begin(), b.data.begin() + capacity, data.begin());
 }
 
 
@@ -113,28 +77,27 @@ bool HashTable::empty() const{
 Value& HashTable::at(const Key& k){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);	
-	if (lst.size() < 1) {
-		throw "empty_list";
+	if (lst.empty()){
+		throw "Empty list";
 	}
 	for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
 		if (it->key == k){
 			return (it->val); 
 		} 
 	}
-	throw "Nothing_good";
-	Value *v = new Value;
-	insert(k, *v);
-return *v;
+	throw "Nothing good";
 }
 
 
 
-bool HashTable::contains(const Key& k){
+bool HashTable::contains(const Key& k) const{
 	unsigned pos = HashFoo(k);
-	std::list<Tmp>& lst = data.at(pos);
-	for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
-		if (it->key == k){
-    		return true;
+	std::list<Tmp> lst = data.at(pos);
+	if (!lst.empty()){
+		for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
+			if (it->key == k){
+    			return true;
+			}
 		}
 	}
 	return false;
@@ -145,9 +108,12 @@ bool HashTable::contains(const Key& k){
 bool HashTable::erase(const Key& k){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);
-	for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
-		if (it->key == k){
-			lst.erase(it);
+	if (!lst.empty()){
+		for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
+			if (it->key == k){
+				lst.erase(it);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -155,24 +121,21 @@ bool HashTable::erase(const Key& k){
 	
 	
 	
-/*
+
 const Value& HashTable::at(const Key& k) const{
 	unsigned pos = HashFoo(k);
-	std::list<Tmp>& lst = data.at(pos);	
-	if (lst.GetSize() < 1) {
-		throw "empty_list";
+	std::list<Tmp> lst = data.at(pos);
+	if (lst.empty()){
+		throw "Empty list";
 	}
 	for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
 		if (it->key == k){
 			return (it->val); 
 		}
 	}
-	throw "Nothing_good";
-	Value *v = new Value;
-	insert(k, *v);
-return *v;
+	throw "Nothing good";
 }
-*/
+
 
 
 void HashTable::clear(){
@@ -184,10 +147,12 @@ void HashTable::clear(){
 Value& HashTable::operator[](const Key& k){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);
-	for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
-	if (it->key == k){
-    	return (it->val);
-		} 
+	if (!lst.empty()){
+		for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
+		if (it->key == k){
+    		return (it->val);
+			} 
+		}
 	}
 	Value *v = new Value;
 	insert(k, *v);
@@ -199,7 +164,7 @@ return *v;
 bool HashTable::insert(const Key& k, const Value& v){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);
-	if (!lst.empty()) {
+	if (!lst.empty()){
 		for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
 			if(it->key == k){
 				it->val = v;
@@ -211,7 +176,10 @@ bool HashTable::insert(const Key& k, const Value& v){
 	value->val = v;
 	value->key = k;
 	(data[pos]).push_front(*value);
-	_size++;	
+	_size++;
+	if (_size > (capacity / 2)){
+		rehashing();	
+	}
 	return true;
 }
 
@@ -219,12 +187,12 @@ bool HashTable::insert(const Key& k, const Value& v){
 
 HashTable& HashTable::operator=(const HashTable& b){
 	if (this != & b){
-		    if (b._size != _size) {
+		if (b._size != _size) {
             data.clear();     
             data.resize(capacity, std::list<Tmp>()); 
             _size = b._size;
 			capacity = b.capacity;
-        } 
+        }
         std::copy(b.data.begin(), b.data.begin() + b.capacity, data.begin());
 	}
 	return *this;
@@ -232,21 +200,25 @@ HashTable& HashTable::operator=(const HashTable& b){
 		
 
 
-bool operator==(HashTable & a, HashTable & b){
-		std::list<Tmp>& lst1 = a.data[0];
-		std::list<Tmp>& lst2 = b.data[0];
-		return true;
+bool operator==(const HashTable & a, const HashTable & b){
+	if (a.capacity != b.capacity || a._size != b._size){
+		return false;	
+	}
+	for (size_t i = 0; i < a.capacity; ++i){
+		std::list<Tmp> lst = a.data.at(i);
+		if (!lst.empty()){
+			for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
+				if (!b.contains(it->key)){
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 
 
-bool operator!=(HashTable & a, HashTable & b){
+bool operator!=(const HashTable & a, const HashTable & b){
 	return !(a==b);
-}
-
-
-
-int main(){
-	
-	
 }
