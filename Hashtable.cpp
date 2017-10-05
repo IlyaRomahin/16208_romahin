@@ -9,6 +9,7 @@ size_t HashTable::HashFoo(const Key& k) const{
 	return hash % capacity;
 }
 
+
 void HashTable::rehashing(){
 	std::vector<std::list<Tmp>> buf;
 	buf.resize(capacity, std::list<Tmp>());
@@ -32,6 +33,7 @@ void HashTable::rehashing(){
 	}
 	buf.clear();
 }
+
 
 HashTable::HashTable(){
 	data.resize(defaultCapacity, std::list<Tmp>());
@@ -139,6 +141,8 @@ const Value& HashTable::at(const Key& k) const{
 
 
 void HashTable::clear(){
+	_size = 0;
+	capacity = defaultCapacity;
 	data.clear();
 }
 
