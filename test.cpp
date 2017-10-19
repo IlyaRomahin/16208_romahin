@@ -49,6 +49,7 @@ TEST(HashTableTest, Contains){
 TEST(HashTableTest, Erase){
 	HashTable a;
 	Value val;
+	EXPECT_FALSE(a.erase("NotKey"));
 	for (int i = 0; i < 253; ++i){
 		val.age = i;
 		val.weight = 10*i;
@@ -137,13 +138,17 @@ TEST(HashTableTest, OperatorEq){
 		val2.weight = 10*i*3;
 		EXPECT_TRUE(a.insert("key"+std::to_string(i), val1));
 		EXPECT_TRUE(b.insert("key"+std::to_string(i*3), val2));
-		
 	}
 	for (int i = 0; i < 653; ++i){
 		EXPECT_TRUE(a.contains("key"+std::to_string(i)));
 		EXPECT_TRUE(b.contains("key"+std::to_string(i*3)));
 	}
 	EXPECT_FALSE(a==b);
+	HashTable c;
+	HashTable d;
+	c.insert("key1", val1);
+	d.insert("key2", val2);
+	EXPECT_FALSE(c==d);
 }
 
 TEST(HashTableTest, OperatorNotEq){
@@ -219,11 +224,25 @@ TEST(HashTableTest, At){
 	Value val;
 	val.age = 20;
 	val.weight = 80;
-	//ASSERT_THROW(a.at("Key"), "Empty List");
 	a.insert("Key", val);
 	ASSERT_NO_THROW(a.at("Key"));
+	ASSERT_THROW(a.at("NotKey"), std::out_of_range);
 	EXPECT_EQ(val.age, a.at("Key").age);
 	EXPECT_EQ(val.weight, a.at("Key").weight);
+}
+
+
+TEST(HashTableTest, ConAt){
+	HashTable a;
+	Value val;
+	val.age = 20;
+	val.weight = 80;
+	a.insert("Key", val);
+	const HashTable b = a;
+	ASSERT_NO_THROW(b.at("Key"));
+	ASSERT_THROW(b.at("NotKey"), std::out_of_range);
+	EXPECT_EQ(val.age, b.at("Key").age);
+	EXPECT_EQ(val.weight, b.at("Key").weight);
 }
 
 
@@ -233,6 +252,7 @@ TEST(HashTableTest, SquBr){
 	val.age = 20;
 	val.weight = 80;
 	a.insert("Key", val);
+	a["NotKey"];
 	ASSERT_NO_THROW(a["Key"]);
 	EXPECT_EQ(val.age, a["Key"].age);
 	EXPECT_EQ(val.weight, a["Key"].weight);

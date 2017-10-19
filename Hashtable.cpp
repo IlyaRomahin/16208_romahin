@@ -1,6 +1,5 @@
 #include "Hashtable.hpp"
 
-
 size_t HashTable::HashFoo(const Key& k) const{
 	size_t hash = 0;
 	for (int i = 0; i < k.length(); ++i){
@@ -9,21 +8,18 @@ size_t HashTable::HashFoo(const Key& k) const{
 	return hash % capacity;
 }
 
-
 void HashTable::rehashing(){
-	std::vector<std::list<Tmp>> buf;
-	buf.resize(capacity, std::list<Tmp>());
-	std::copy(data.begin(), data.begin() + capacity, buf.begin());
+	std::vector<std::list<Tmp>> buf = data;
 	data.clear();
 	_size = 0;
-	if (capacity > (UINT_MAX / 2)){
-		capacity = UINT_MAX;
+	if (capacity > (std::numeric_limits<std::size_t>::max() / half)){
+		capacity = std::numeric_limits<std::size_t>::max();
 	}
 	else {
-		capacity *= 2;	
+		capacity *= half;
 	}
 	data.resize(capacity, std::list<Tmp>());
-	for (size_t i = 0; i < (capacity / 2); ++i){
+	for (size_t i = 0; i < (capacity / half); ++i){
 		std::list<Tmp>& lst = buf.at(i);
 		if (!lst.empty()){
 			for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
@@ -31,30 +27,15 @@ void HashTable::rehashing(){
 			}
 		}	
 	}
-	buf.clear();
 }
-
 
 HashTable::HashTable(){
 	data.resize(defaultCapacity, std::list<Tmp>());
 }
 
+HashTable::~HashTable() {}
 
-
-HashTable::~HashTable(){
-	data.clear();
-}
-
-
-
-HashTable::HashTable(const HashTable& b){
-	capacity = b.capacity;
-	_size = b._size;
-	data.resize(capacity, std::list<Tmp>());
-	std::copy(b.data.begin(), b.data.begin() + capacity, data.begin());
-}
-
-
+HashTable::HashTable(const HashTable& b) : capacity (b.capacity), _size (b._size), data (b.data) {}
 
 void HashTable::swap(HashTable& b){
 	std::swap(b._size, _size);
@@ -62,35 +43,24 @@ void HashTable::swap(HashTable& b){
 	std::swap(b.data, data);
 }
 
-
-
 size_t HashTable::size() const{
 	return _size;
 }
-
-
 
 bool HashTable::empty() const{
 	return _size == 0;
 }
 
-
-
 Value& HashTable::at(const Key& k){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);	
-	if (lst.empty()){
-		throw "Empty list";
-	}
 	for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
 		if (it->key == k){
 			return (it->val); 
 		} 
 	}
-	throw "Nothing good";
+	throw std::out_of_range("out_of_range");
 }
-
-
 
 bool HashTable::contains(const Key& k) const{
 	unsigned pos = HashFoo(k);
@@ -104,8 +74,6 @@ bool HashTable::contains(const Key& k) const{
 	}
 	return false;
 }
-
-
 
 bool HashTable::erase(const Key& k){
 	unsigned pos = HashFoo(k);
@@ -121,24 +89,17 @@ bool HashTable::erase(const Key& k){
 	return false;
 }
 	
-	
-	
 
 const Value& HashTable::at(const Key& k) const{
 	unsigned pos = HashFoo(k);
 	std::list<Tmp> lst = data.at(pos);
-	if (lst.empty()){
-		throw "Empty list";
-	}
 	for(std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
 		if (it->key == k){
 			return (it->val); 
 		}
 	}
-	throw "Nothing good";
+	throw std::out_of_range("out_of_range");
 }
-
-
 
 void HashTable::clear(){
 	_size = 0;
@@ -146,24 +107,21 @@ void HashTable::clear(){
 	data.clear();
 }
 
-	
-
 Value& HashTable::operator[](const Key& k){
 	unsigned pos = HashFoo(k);
 	std::list<Tmp>& lst = data.at(pos);
 	if (!lst.empty()){
 		for (std::list<Tmp>::iterator it = lst.begin(); it != lst.end(); ++it) {
-		if (it->key == k){
-    		return (it->val);
+			if (it->key == k){
+    			return (it->val);
 			} 
 		}
 	}
-	Value *v = new Value;
-	insert(k, *v);
-return *v;
+	Value v;
+	Value &val = v;
+	insert(k, val);
+return val;
 }
-
-
 
 bool HashTable::insert(const Key& k, const Value& v){
 	unsigned pos = HashFoo(k);
@@ -176,18 +134,13 @@ bool HashTable::insert(const Key& k, const Value& v){
 			}
 		}
 	}
-	Tmp *value = new Tmp;
-	value->val = v;
-	value->key = k;
-	(data[pos]).push_front(*value);
+	(data[pos]).push_front(Tmp(k,v));
 	_size++;
-	if (_size > (capacity / 2)){
+	if (_size > (capacity / half)){
 		rehashing();	
 	}
 	return true;
 }
-
-
 
 HashTable& HashTable::operator=(const HashTable& b){
 	if (this != & b){
@@ -201,8 +154,6 @@ HashTable& HashTable::operator=(const HashTable& b){
 	}
 	return *this;
 }
-		
-
 
 bool operator==(const HashTable & a, const HashTable & b){
 	if (a.capacity != b.capacity || a._size != b._size){
