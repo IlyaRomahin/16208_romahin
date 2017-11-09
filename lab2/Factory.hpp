@@ -11,23 +11,23 @@ public:
 template< class Product,
 		  class Creator,
 		  class ID,
-		  class ErrorPolicy = DefaultErrorPolicy<Product> >
+		  class ErrorPolicy = DefaultErrorPolicy< Product > >
 class Factory {
-public:	
+public:
 	static
 	Factory * get_instance() {
 		static Factory f;
 		return &f;
 	}	
 	
-	Product* create(const ID& id) {
-		if (!(strategies.contains(id))) {
+	Product * create( const ID& id ) {
+		if ( !( strategies.contains( id ) ) ) {
 			return ErrorPolicy::error();
 		}
-			return strategies[id]();
+			return strategies[ id ]();
 	}
-	bool regist3r(const ID& id, Creator creator) {
-		strategies[id] = creator;
+	bool regist3r( const ID& id, Creator creator ) {
+		strategies[ id ] = creator;
 		return true;
 	}
 	

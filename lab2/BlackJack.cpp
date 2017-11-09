@@ -121,24 +121,24 @@ Enemy::~Enemy() {}
 
 int main( int argc, char *argv[] ) {
 		
-	std::vector<Strategy *> strats;
+	std::vector< Strategy * > strats;
 
-	if (argc < 3) {
+	if ( argc < 3 ) {
 		std::cout << "Please give me players!" << std::endl;
 		return -1;
 	}
 	
-	Factory<Strategy, Strategy*(*)(), std::string> * f = Factory<Strategy, Strategy*(*)(), std::string>::get_instance(); 
+	Factory< Strategy, Strategy*(*)(), std::string > * f = Factory< Strategy, Strategy*(*)(), std::string >::get_instance(); 
 
-	for (int i = 1; i < argc; ++i){
-		strats.push_back(f->create(argv[i]));	
+	for ( int i = 1; i < argc; ++i ){
+		strats.push_back( f->create( argv[ i ] ) );	
 	}
 	
-	for (Strategy * st : strats) {
+	for ( Strategy * st : strats ) {
 		st->strategy( 0, 0 );	
 	}
 	
-	for (Strategy * st : strats) {
+	for ( Strategy * st : strats ) {
 		delete st;
 	}
 	

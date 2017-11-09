@@ -12,6 +12,6 @@ public:
 
 namespace {
 bool b = 
-Factory<Strategy, Strategy*(*)(), std::string>::get_instance()->
-	regist3r("easystrategy2", []() -> Strategy * { return new EasyStrategy2; });
+Factory< Strategy, Strategy*(*)(), std::string >::get_instance()->
+	regist3r( "easystrategy2", []() -> Strategy * { return new EasyStrategy2; } );
 }
