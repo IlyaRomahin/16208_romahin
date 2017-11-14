@@ -46,11 +46,11 @@ private:
 };
 
 class Hand {
-public:	
+public:
   Hand();
   ~Hand();
-  Hand( const Hand &b );	
-  std::vector< Card > hand_data;		
+  Hand( const Hand &b );
+  std::vector< Card > hand_data;	
 private:
   size_t static const defaultCapacity = 10;
   size_t _size = 0;
@@ -67,10 +67,22 @@ private:
   Card first_card = e_hand.hand_data[ 0 ];	
 };
 
-class Dealer {
-  Dealer();
-  ~Dealer();
-  void distribution( Deck &b );
+class Strategy { // Интерфейс
+public:
+	virtual void strategy( const Deck &deck, Hand hand, const bool first ) = 0;
+	
+	virtual ~Strategy() {}
+};
+
+class Game {
+public:	
+  Game();
+  ~Game();
+  void detailed( std::vector< Strategy * > &strats, const size_t count );
+  void fast( std::vector< Strategy * > &strats, const size_t count );
+  void tournament( std::vector< Strategy * > &strats, const size_t count );
+private:
+  Deck deck;	
 };
 
 #endif

@@ -1,11 +1,11 @@
 #include <algorithm>
 #include <iostream>
-#include "Strategy.hpp"
+#include "BlackJack.hpp"
 #include "Factory.hpp"	
 	
 class HardStrategy5 : public Strategy {
 public:	
-	void strategy( int x, int y ) override {
+	void strategy( const Deck &deck, Hand hand, const bool first ) override {
 		std::cout << "HardStrategy5 is started" << std::endl;
 	}	
 };

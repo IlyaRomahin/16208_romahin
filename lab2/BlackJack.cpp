@@ -1,6 +1,5 @@
 #include "BlackJack.hpp"
 #include "Factory.hpp"
-#include "Strategy.hpp"
 #include <iostream>
 #include <exception>
 
@@ -107,39 +106,78 @@ Hand::~Hand() {}
 
 Hand::Hand( const Hand &b ) : _size( b._size ), capacity( b.capacity ), hand_data( b.hand_data ) {}
 
-Dealer::Dealer() {}
-
-Dealer::~Dealer() {}
-
-void Dealer::distribution( Deck &b ) {
-  b.shuffle();
-}
-
 Enemy::Enemy() {}
 
 Enemy::~Enemy() {}
 
+Game::Game() {}
+
+Game::~Game() {}
+
+void Game::detailed( std::vector< Strategy * > &strats, const size_t count ) {
+  std::cout << "Detailed mode is started" << std::endl;
+  for ( size_t i = 0; i < count - 1; ++i ) {
+	for ( size_t j = i + 1; j < count; ++j ) {
+	  deck.shuffle();	
+      strats[ i ]->strategy( deck, Hand(), true );
+      strats[ j ]->strategy( deck, Hand(), false );
+	}
+  }
+}
+
+void Game::fast( std::vector< Strategy * > &strats, const size_t count ) {
+  std::cout << "Fast mode is started" << std::endl;
+  for ( size_t i = 0; i < count - 1; ++i ) {
+	for ( size_t j = i + 1; j < count; ++j ) {
+	  deck.shuffle();
+      strats[ i ]->strategy( deck, Hand(), true );
+      strats[ j ]->strategy( deck, Hand(), false );
+	}
+  }
+}
+
+void Game::tournament( std::vector< Strategy * > &strats, const size_t count ) {
+  std::cout << "Tournament mode is started" << std::endl;
+  for ( size_t i = 0; i < count - 1; ++i ) {
+	for ( size_t j = i + 1; j < count; ++j ) {
+	  deck.shuffle();
+      strats[ i ]->strategy( deck, Hand(), true );
+      strats[ j ]->strategy( deck, Hand(), false );
+	}
+  }
+}
+
 int main( int argc, char *argv[] ) {
 		
+	Game game;
+	
 	std::vector< Strategy * > strats;
 
 	if ( argc < 3 ) {
-		std::cout << "Please give me players!" << std::endl;
-		return -1;
+	  std::cout << "Please give me players!" << std::endl;
+	  return -1;
 	}
 	
 	Factory< Strategy, Strategy*(*)(), std::string > * f = Factory< Strategy, Strategy*(*)(), std::string >::get_instance(); 
 
 	for ( int i = 1; i < argc; ++i ){
-		strats.push_back( f->create( argv[ i ] ) );	
+	  strats.push_back( f->create( argv[ i ] ) );	
+	}
+	
+	if ( argc == 4 ) {
+	  game.detailed( strats, argc - 1 );	
+	}
+	
+	if ( argc == 3 ) {
+	  game.fast( strats, argc - 1 );	
+	}
+	
+	if ( argc > 4 ) {
+	  game.tournament( strats, argc - 1 );	
 	}
 	
 	for ( Strategy * st : strats ) {
-		st->strategy( 0, 0 );	
-	}
-	
-	for ( Strategy * st : strats ) {
-		delete st;
+	  delete st;
 	}
 	
 }
