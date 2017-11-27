@@ -14,11 +14,10 @@ public:
   friend bool operator==( const Card &a, const Card &b );
   friend bool operator!=( const Card &a, const Card &b );
   std::string value;
-  std::string suit;	
-private:	
+  std::string suit;
   int weight = 0;
   bool _ace = false;
-  bool used = false;	
+private:	
   const std::string spades = "spades";
   const std::string hearts = "hearts";
   const std::string clubs = "clubs";
@@ -51,25 +50,16 @@ public:
   ~Hand();
   Hand( const Hand &b );
   std::vector< Card > hand_data;	
-private:
-  size_t static const defaultCapacity = 10;
-  size_t _size = 0;
+  int _size = 0;
+  int ace_counter = 0;
+private:	
+  size_t static const defaultCapacity = 12;
   size_t capacity = defaultCapacity;
-};
-
-class Enemy {
-public:
-  Enemy();
-  ~Enemy();
-private:
-  Hand e_hand;
-  size_t victory_conter = 0;
-  Card first_card = e_hand.hand_data[ 0 ];	
 };
 
 class Strategy { // Интерфейс
 public:
-	virtual void strategy( const Deck &deck, Hand hand, const bool first ) = 0;
+	virtual void strategy( const Deck &deck, Hand hand, const bool first, int * position, int * hand_weight, std::string &strategy_name, bool &gold_winner ) = 0;
 	
 	virtual ~Strategy() {}
 };
@@ -82,6 +72,13 @@ public:
   void fast( std::vector< Strategy * > &strats, const size_t count );
   void tournament( std::vector< Strategy * > &strats, const size_t count );
 private:
+  struct Tmp {
+    size_t counter = 0;
+    std::string name;
+	Tmp() {}
+	~Tmp() {}
+  };
+  std::vector< Tmp > victory;
   Deck deck;	
 };
 
