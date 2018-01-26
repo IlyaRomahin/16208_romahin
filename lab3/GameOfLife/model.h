@@ -2,6 +2,7 @@
 #define MODEL_H
 
 #include <string>
+#include <vector>
 #include <QWidget>
 
 class Model : public QWidget
@@ -25,10 +26,14 @@ public:
     std::string dump();
     void setDump(const std::string &data);
     void newGeneration();
+    std::vector<bool> &getNext();
+    std::vector<bool> &getUniverse();
+    void setUniverse(std::vector<bool> &u);
+    void setNext(std::vector<bool> &n);
 private:
     int generations;
-    bool * universe;
-    bool * next;
+    std::vector<bool> universe;
+    std::vector<bool> next;
     int height;
     int width;
     std::string rule = "Conway`s";

@@ -22,32 +22,43 @@ public:
 
 signals:
     void nextGeneration(bool ok);
+    void startButclicked(bool ok);
+    void stopButclicked(bool ok);
+    void clearButclicked(bool ok);
+    void saveButclicked(bool ok);
+    void loadButclicked(bool ok);
+    void colorButclicked(bool ok);
+    void rulesContValueChanged(QString);
+    void iterInterValueChanged(int);
+    void heightContValueChanged(int);
+    void widthContValueChanged(int);
 
 public slots:
-    void newGeneration();
+    void newGeneration(bool);
     void selectMasterColor();
     void startGame();
     void stopGame();
-    void clear();
-    void setRule();
-    void setHeight();
-    void setWidth();
+    std::vector<bool> &getNext();
+    std::vector<bool> &getUniverse();
+    void setHeight(const int h);
+    void setWidth(const int w);
     int interval();
     void setInterval(const int msec);
     QColor masterColor();
     void setMasterColor(const QColor &color);
-    void loadGame();
+    void setNext(std::vector<bool> &n);
+    void setUniverse(std::vector<bool> &u);
     void needUpdate();
-    QPushButton * startBut();
-    QPushButton * stopBut();
-    QPushButton * clearBut();
-    QPushButton * saveBut();
-    QPushButton * loadBut();
-    QPushButton * colorBut();
-    QComboBox * rulesCont();
-    QSpinBox * iterInter();
-    QSpinBox * heightCont();
-    QSpinBox * widthCont();
+    void startBut();
+    void stopBut();
+    void clearBut();
+    void saveBut();
+    void loadBut();
+    void colorBut();
+    void rulesCont(QString r);
+    void iterInter(int it);
+    void heightCont(int h);
+    void widthCont(int w);
 
     
 private:

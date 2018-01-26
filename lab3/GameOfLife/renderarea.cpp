@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <qmath.h>
 #include "renderarea.h"
+#include <iostream>
 
 RenderArea::RenderArea(QWidget *parent) :
     QWidget(parent),
@@ -15,19 +16,11 @@ RenderArea::RenderArea(QWidget *parent) :
     width_(50),
     rule("Conway`s")
 {
-    timer->setInterval(300);
+    timer->setInterval(100);
     m_masterColor = "#000";
-    universe = new bool[(height_ + 2) * (width_ + 2)];
-    next = new bool[(height_ + 2) * (width_ + 2)];
     connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
-    memset(universe, false, sizeof(bool) * (height_ + 2) * (width_ + 2));
-    memset(next, false, sizeof(bool) * (height_ + 2) * (width_ + 2));
-}
-
-RenderArea::~RenderArea()
-{
-    delete [] universe;
-    delete [] next;
+    universe.resize(((height_ + 2) * (width_ + 2)), bool());
+    next.resize(((height_ + 2) * (width_ + 2)), bool());
 }
 
 void RenderArea::startGame()
@@ -40,28 +33,35 @@ void RenderArea::stopGame()
     timer->stop();
 }
 
-void RenderArea::clear()
+std::vector<bool> &RenderArea::getUniverse()
 {
+    return universe;
+}
+
+std::vector<bool> &RenderArea::getNext()
+{
+    return next;
+}
+
+void RenderArea::setNext(std::vector<bool> &n)
+{
+    next = n;
+}
+
+void RenderArea::setUniverse(std::vector<bool> &u)
+{
+    universe = u;
+}
+
+void RenderArea::setHeight(const int h)
+{
+    height_ = h;
     update();
 }
 
-void RenderArea::setRule()
+void RenderArea::setWidth(const int w)
 {
-    update();
-}
-
-void RenderArea::setHeight()
-{
-    update();
-}
-
-void RenderArea::setWidth()
-{
-    update();
-}
-
-void RenderArea::loadGame()
-{
+    width_ = w;
     update();
 }
 

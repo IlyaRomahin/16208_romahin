@@ -9,7 +9,6 @@ class Controller : public QWidget
 Q_OBJECT
 public:
     Controller(QWidget *parent, Model *m, MainWindow *w);
-    ~Controller();
 
 signals:
     void environmentChanged(bool ok);
@@ -18,7 +17,7 @@ signals:
 public slots:
     void saveGame();
     void loadGame();
-    void startGame();
+    void startGame(bool);
     void stopGame();
     void clear();
     void selectMasterColor();

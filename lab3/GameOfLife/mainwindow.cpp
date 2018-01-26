@@ -6,6 +6,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include<iostream>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -18,12 +20,23 @@ MainWindow::MainWindow(QWidget *parent) :
     icon.fill(currentColor);
     ui->colorButton->setIcon( QIcon(icon) );
 
+    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startBut()));
+    connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopBut()));
+    connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearBut()));
+    connect(ui->rulesControl, SIGNAL(currentTextChanged(QString)), this, SLOT(rulesCont(QString)));
+    connect(ui->iterInterval, SIGNAL(valueChanged(int)), this, SLOT(iterInter(int)));
+    connect(ui->heightControl, SIGNAL(valueChanged(int)), this, SLOT(heightCont(int)));
+    connect(ui->widthControl, SIGNAL(valueChanged(int)), this, SLOT(widthCont(int)));
+    connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(colorBut()));
+    connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadBut()));
+    connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveBut()));
+
     connect(field, SIGNAL(gameEnds(bool)), ui->rulesControl, SLOT(setEnabled(bool)));
     connect(field, SIGNAL(gameEnds(bool)), ui->heightControl, SLOT(setEnabled(bool)));
     connect(field, SIGNAL(gameEnds(bool)), ui->widthControl, SLOT(setEnabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->heightControl, SLOT(setDisabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->widthControl, SLOT(setDisabled(bool)));
-    connect(field, SIGNAL(nextGeneration(bool)), this, SLOT(newGeneration()));
+    connect(field, SIGNAL(nextGeneration(bool)), this, SLOT(newGeneration(bool)));
 
     ui->rulesControl->addItem( "Conway`s" );
     ui->rulesControl->addItem( "HighLife" );
@@ -53,29 +66,34 @@ void MainWindow::stopGame()
     field->stopGame();
 }
 
-void MainWindow::clear()
+std::vector<bool> &MainWindow::getUniverse()
 {
-    field->clear();
+    return field->getUniverse();
 }
 
-void MainWindow::setRule()
+std::vector<bool> &MainWindow::getNext()
 {
-    field->setRule();
+    return field->getNext();
 }
 
-void MainWindow::setHeight()
+void MainWindow::setNext(std::vector<bool> &n)
 {
-    field->setHeight();
+    field->setNext(n);
 }
 
-void MainWindow::setWidth()
+void MainWindow::setUniverse(std::vector<bool> &u)
 {
-    field->setWidth();
+    field->setUniverse(u);
 }
 
-void MainWindow::loadGame()
+void MainWindow::setHeight(const int h)
 {
-    field->loadGame();
+    field->setHeight(h);
+}
+
+void MainWindow::setWidth(const int w)
+{
+    field->setWidth(w);
 }
 
 void MainWindow::needUpdate()
@@ -83,7 +101,7 @@ void MainWindow::needUpdate()
     field->needUpdate();
 }
 
-void MainWindow::newGeneration()
+void MainWindow::newGeneration(bool)
 {
     emit(nextGeneration(true));
 }
@@ -98,54 +116,55 @@ void MainWindow::setInterval(const int msec)
     field->setInterval(msec);
 }
 
-QPushButton *  MainWindow::startBut()
+void MainWindow::startBut()
 {
-    return ui->startButton;
+    emit startButclicked(true);
+    std::cout << "bnbnj" << std::endl;
 }
 
-QPushButton * MainWindow::stopBut()
+void MainWindow::stopBut()
 {
-    return ui->stopButton;
+    emit(stopButclicked(true));
 }
 
-QPushButton * MainWindow::clearBut()
+void MainWindow::clearBut()
 {
-    return ui->clearButton;
+    emit(clearButclicked(true));
 }
 
-QPushButton * MainWindow::saveBut()
+void MainWindow::saveBut()
 {
-    return ui->saveButton;
+    emit(saveButclicked(true));
 }
 
-QPushButton * MainWindow::loadBut()
+void MainWindow::loadBut()
 {
-    return ui->loadButton;
+    emit(loadButclicked(true));
 }
 
-QPushButton * MainWindow::colorBut()
+void MainWindow::colorBut()
 {
-    return ui->colorButton;
+    emit(colorButclicked(true));
 }
 
-QComboBox * MainWindow::rulesCont()
+void MainWindow::rulesCont(QString r)
 {
-    return ui->rulesControl;
+    emit(rulesContValueChanged(r));
 }
 
-QSpinBox * MainWindow::iterInter()
+void MainWindow::iterInter(int it)
 {
-    return ui->iterInterval;
+    emit(iterInterValueChanged(it));
 }
 
-QSpinBox * MainWindow::heightCont()
+void MainWindow::heightCont(int h)
 {
-    return ui->heightControl;
+    emit(heightContValueChanged(h));
 }
 
-QSpinBox * MainWindow::widthCont()
+void MainWindow::widthCont(int w)
 {
-    return ui->widthControl;
+    emit(widthContValueChanged(w));
 }
 
 QColor MainWindow::masterColor()

@@ -9,7 +9,6 @@ class RenderArea : public QWidget
 Q_OBJECT
 public:
     explicit RenderArea(QWidget *parent = 0);
-    ~RenderArea();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -26,11 +25,14 @@ public slots:
     void startGame();
     void stopGame();
 
-    void clear();
-    void setRule();
-    void setHeight();
-    void setWidth();
-    void loadGame();
+    std::vector<bool> &getNext();
+    std::vector<bool> &getUniverse();
+
+    void setUniverse(std::vector<bool> &u);
+    void setNext(std::vector<bool> &n);
+
+    void setHeight(const int h);
+    void setWidth(const int w);
     void needUpdate();
 
     int interval();
@@ -48,8 +50,8 @@ private:
     QColor m_masterColor;
     QTimer* timer;
     int generations;
-    bool* universe;
-    bool* next;
+    std::vector<bool> universe;
+    std::vector<bool> next;
     int height_;
     int width_;
     QString rule;

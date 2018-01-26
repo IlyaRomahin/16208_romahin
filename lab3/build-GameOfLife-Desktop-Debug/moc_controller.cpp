@@ -94,24 +94,24 @@ static const uint qt_meta_data_Controller[] = {
  // slots: name, argc, parameters, tag, flags
        5,    0,  130,    2, 0x0a /* Public */,
        6,    0,  131,    2, 0x0a /* Public */,
-       7,    0,  132,    2, 0x0a /* Public */,
-       8,    0,  133,    2, 0x0a /* Public */,
-       9,    0,  134,    2, 0x0a /* Public */,
-      10,    0,  135,    2, 0x0a /* Public */,
-      11,    0,  136,    2, 0x0a /* Public */,
-      12,    1,  137,    2, 0x0a /* Public */,
-      14,    0,  140,    2, 0x0a /* Public */,
-      15,    1,  141,    2, 0x0a /* Public */,
-      17,    0,  144,    2, 0x0a /* Public */,
-      18,    1,  145,    2, 0x0a /* Public */,
-      20,    0,  148,    2, 0x0a /* Public */,
-      21,    1,  149,    2, 0x0a /* Public */,
-      23,    0,  152,    2, 0x0a /* Public */,
-      24,    1,  153,    2, 0x0a /* Public */,
-      26,    0,  156,    2, 0x08 /* Private */,
-      27,    0,  157,    2, 0x08 /* Private */,
-      28,    0,  158,    2, 0x08 /* Private */,
-      29,    0,  159,    2, 0x08 /* Private */,
+       7,    1,  132,    2, 0x0a /* Public */,
+       8,    0,  135,    2, 0x0a /* Public */,
+       9,    0,  136,    2, 0x0a /* Public */,
+      10,    0,  137,    2, 0x0a /* Public */,
+      11,    0,  138,    2, 0x0a /* Public */,
+      12,    1,  139,    2, 0x0a /* Public */,
+      14,    0,  142,    2, 0x0a /* Public */,
+      15,    1,  143,    2, 0x0a /* Public */,
+      17,    0,  146,    2, 0x0a /* Public */,
+      18,    1,  147,    2, 0x0a /* Public */,
+      20,    0,  150,    2, 0x0a /* Public */,
+      21,    1,  151,    2, 0x0a /* Public */,
+      23,    0,  154,    2, 0x0a /* Public */,
+      24,    1,  155,    2, 0x0a /* Public */,
+      26,    0,  158,    2, 0x08 /* Private */,
+      27,    0,  159,    2, 0x08 /* Private */,
+      28,    0,  160,    2, 0x08 /* Private */,
+      29,    0,  161,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -120,7 +120,7 @@ static const uint qt_meta_data_Controller[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -152,7 +152,7 @@ void Controller::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->gameEnds((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 2: _t->saveGame(); break;
         case 3: _t->loadGame(); break;
-        case 4: _t->startGame(); break;
+        case 4: _t->startGame((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 5: _t->stopGame(); break;
         case 6: _t->clear(); break;
         case 7: _t->selectMasterColor(); break;

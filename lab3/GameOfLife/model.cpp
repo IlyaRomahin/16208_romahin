@@ -11,16 +11,33 @@ Model::Model(QWidget *parent) :
     width(50),
     rule("Conway`s")
 {
-    universe = new bool[(height + 2) * (width + 2)];
-    next = new bool[(height + 2) * (width + 2)];
-    std::memset(universe, false, sizeof(bool) * (height + 2) * (width + 2));
-    std::memset(next, false, sizeof(bool) * (height + 2) * (width + 2));
+    universe.resize(((height + 2) * (width + 2)), bool());
+    next.resize(((height + 2) * (width + 2)), bool());
 }
 
 Model::~Model()
 {
-    delete [] universe;
-    delete [] next;
+
+}
+
+std::vector<bool> &Model::getUniverse()
+{
+    return universe;
+}
+
+std::vector<bool> &Model::getNext()
+{
+    return next;
+}
+
+void Model::setNext(std::vector<bool> &n)
+{
+    next = n;
+}
+
+void Model::setUniverse(std::vector<bool> &u)
+{
+    universe = u;
 }
 
 void Model::setGenerations(const int number)
@@ -71,12 +88,10 @@ void Model::setWidthCellNumber(const int w)
 
 void Model::resetUniverse()
 {
-    delete [] universe;
-    delete [] next;
-    universe = new bool[(height + 2) * (width + 2)];
-    next = new bool[(height + 2) * (width + 2)];
-    std::memset(universe, false, sizeof(bool) * (height + 2) * (width + 2));
-    std::memset(next, false, sizeof(bool) * (height + 2) * (width + 2));
+    universe.clear();
+    next.clear();
+    universe.resize(((height + 2) * (width + 2)), bool());
+    next.resize(((height + 2) * (width + 2)), bool());
 }
 
 std::string Model::dump()

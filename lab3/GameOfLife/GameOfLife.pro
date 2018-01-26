@@ -14,12 +14,12 @@ TEMPLATE = app
 SOURCES += main.cpp \
         mainwindow.cpp \
     	renderarea.cpp \
-    model.cpp \
-    controller.cpp
+    	model.cpp \
+    	controller.cpp
 
 HEADERS  += mainwindow.h \
     		renderarea.h \
-    model.h \
-    controller.h
+    		model.h \
+    		controller.h
 
 FORMS    += mainwindow.ui

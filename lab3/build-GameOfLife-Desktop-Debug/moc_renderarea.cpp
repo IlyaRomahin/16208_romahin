@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_RenderArea_t {
-    QByteArrayData data[25];
-    char stringdata0[239];
+    QByteArrayData data[31];
+    char stringdata0[283];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,29 +39,36 @@ QT_MOC_LITERAL(4, 34, 8), // "gameEnds"
 QT_MOC_LITERAL(5, 43, 14), // "nextGeneration"
 QT_MOC_LITERAL(6, 58, 9), // "startGame"
 QT_MOC_LITERAL(7, 68, 8), // "stopGame"
-QT_MOC_LITERAL(8, 77, 5), // "clear"
-QT_MOC_LITERAL(9, 83, 7), // "setRule"
-QT_MOC_LITERAL(10, 91, 9), // "setHeight"
-QT_MOC_LITERAL(11, 101, 8), // "setWidth"
-QT_MOC_LITERAL(12, 110, 8), // "loadGame"
-QT_MOC_LITERAL(13, 119, 10), // "needUpdate"
-QT_MOC_LITERAL(14, 130, 8), // "interval"
-QT_MOC_LITERAL(15, 139, 11), // "setInterval"
-QT_MOC_LITERAL(16, 151, 4), // "msec"
-QT_MOC_LITERAL(17, 156, 11), // "masterColor"
-QT_MOC_LITERAL(18, 168, 14), // "setMasterColor"
-QT_MOC_LITERAL(19, 183, 5), // "color"
-QT_MOC_LITERAL(20, 189, 9), // "paintGrid"
-QT_MOC_LITERAL(21, 199, 9), // "QPainter&"
-QT_MOC_LITERAL(22, 209, 1), // "p"
-QT_MOC_LITERAL(23, 211, 13), // "paintUniverse"
-QT_MOC_LITERAL(24, 225, 13) // "newGeneration"
+QT_MOC_LITERAL(8, 77, 7), // "getNext"
+QT_MOC_LITERAL(9, 85, 11), // "getUniverse"
+QT_MOC_LITERAL(10, 97, 11), // "setUniverse"
+QT_MOC_LITERAL(11, 109, 18), // "std::vector<bool>&"
+QT_MOC_LITERAL(12, 128, 1), // "u"
+QT_MOC_LITERAL(13, 130, 7), // "setNext"
+QT_MOC_LITERAL(14, 138, 1), // "n"
+QT_MOC_LITERAL(15, 140, 9), // "setHeight"
+QT_MOC_LITERAL(16, 150, 1), // "h"
+QT_MOC_LITERAL(17, 152, 8), // "setWidth"
+QT_MOC_LITERAL(18, 161, 1), // "w"
+QT_MOC_LITERAL(19, 163, 10), // "needUpdate"
+QT_MOC_LITERAL(20, 174, 8), // "interval"
+QT_MOC_LITERAL(21, 183, 11), // "setInterval"
+QT_MOC_LITERAL(22, 195, 4), // "msec"
+QT_MOC_LITERAL(23, 200, 11), // "masterColor"
+QT_MOC_LITERAL(24, 212, 14), // "setMasterColor"
+QT_MOC_LITERAL(25, 227, 5), // "color"
+QT_MOC_LITERAL(26, 233, 9), // "paintGrid"
+QT_MOC_LITERAL(27, 243, 9), // "QPainter&"
+QT_MOC_LITERAL(28, 253, 1), // "p"
+QT_MOC_LITERAL(29, 255, 13), // "paintUniverse"
+QT_MOC_LITERAL(30, 269, 13) // "newGeneration"
 
     },
     "RenderArea\0environmentChanged\0\0ok\0"
     "gameEnds\0nextGeneration\0startGame\0"
-    "stopGame\0clear\0setRule\0setHeight\0"
-    "setWidth\0loadGame\0needUpdate\0interval\0"
+    "stopGame\0getNext\0getUniverse\0setUniverse\0"
+    "std::vector<bool>&\0u\0setNext\0n\0setHeight\0"
+    "h\0setWidth\0w\0needUpdate\0interval\0"
     "setInterval\0msec\0masterColor\0"
     "setMasterColor\0color\0paintGrid\0QPainter&\0"
     "p\0paintUniverse\0newGeneration"
@@ -74,7 +81,7 @@ static const uint qt_meta_data_RenderArea[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -82,26 +89,27 @@ static const uint qt_meta_data_RenderArea[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  104,    2, 0x06 /* Public */,
-       4,    1,  107,    2, 0x06 /* Public */,
-       5,    1,  110,    2, 0x06 /* Public */,
+       1,    1,  109,    2, 0x06 /* Public */,
+       4,    1,  112,    2, 0x06 /* Public */,
+       5,    1,  115,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    0,  113,    2, 0x0a /* Public */,
-       7,    0,  114,    2, 0x0a /* Public */,
-       8,    0,  115,    2, 0x0a /* Public */,
-       9,    0,  116,    2, 0x0a /* Public */,
-      10,    0,  117,    2, 0x0a /* Public */,
-      11,    0,  118,    2, 0x0a /* Public */,
-      12,    0,  119,    2, 0x0a /* Public */,
-      13,    0,  120,    2, 0x0a /* Public */,
-      14,    0,  121,    2, 0x0a /* Public */,
-      15,    1,  122,    2, 0x0a /* Public */,
-      17,    0,  125,    2, 0x0a /* Public */,
-      18,    1,  126,    2, 0x0a /* Public */,
-      20,    1,  129,    2, 0x08 /* Private */,
-      23,    1,  132,    2, 0x08 /* Private */,
-      24,    0,  135,    2, 0x08 /* Private */,
+       6,    0,  118,    2, 0x0a /* Public */,
+       7,    0,  119,    2, 0x0a /* Public */,
+       8,    0,  120,    2, 0x0a /* Public */,
+       9,    0,  121,    2, 0x0a /* Public */,
+      10,    1,  122,    2, 0x0a /* Public */,
+      13,    1,  125,    2, 0x0a /* Public */,
+      15,    1,  128,    2, 0x0a /* Public */,
+      17,    1,  131,    2, 0x0a /* Public */,
+      19,    0,  134,    2, 0x0a /* Public */,
+      20,    0,  135,    2, 0x0a /* Public */,
+      21,    1,  136,    2, 0x0a /* Public */,
+      23,    0,  139,    2, 0x0a /* Public */,
+      24,    1,  140,    2, 0x0a /* Public */,
+      26,    1,  143,    2, 0x08 /* Private */,
+      29,    1,  146,    2, 0x08 /* Private */,
+      30,    0,  149,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -113,16 +121,17 @@ static const uint qt_meta_data_RenderArea[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 11,   12,
+    QMetaType::Void, 0x80000000 | 11,   14,
+    QMetaType::Void, QMetaType::Int,   16,
+    QMetaType::Void, QMetaType::Int,   18,
     QMetaType::Void,
     QMetaType::Int,
-    QMetaType::Void, QMetaType::Int,   16,
+    QMetaType::Void, QMetaType::Int,   22,
     QMetaType::QColor,
-    QMetaType::Void, QMetaType::QColor,   19,
-    QMetaType::Void, 0x80000000 | 21,   22,
-    QMetaType::Void, 0x80000000 | 21,   22,
+    QMetaType::Void, QMetaType::QColor,   25,
+    QMetaType::Void, 0x80000000 | 27,   28,
+    QMetaType::Void, 0x80000000 | 27,   28,
     QMetaType::Void,
 
        0        // eod
@@ -139,21 +148,22 @@ void RenderArea::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->nextGeneration((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 3: _t->startGame(); break;
         case 4: _t->stopGame(); break;
-        case 5: _t->clear(); break;
-        case 6: _t->setRule(); break;
-        case 7: _t->setHeight(); break;
-        case 8: _t->setWidth(); break;
-        case 9: _t->loadGame(); break;
-        case 10: _t->needUpdate(); break;
-        case 11: { int _r = _t->interval();
+        case 5: _t->getNext(); break;
+        case 6: _t->getUniverse(); break;
+        case 7: _t->setUniverse((*reinterpret_cast< std::vector<bool>(*)>(_a[1]))); break;
+        case 8: _t->setNext((*reinterpret_cast< std::vector<bool>(*)>(_a[1]))); break;
+        case 9: _t->setHeight((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 10: _t->setWidth((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 11: _t->needUpdate(); break;
+        case 12: { int _r = _t->interval();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 12: _t->setInterval((*reinterpret_cast< const int(*)>(_a[1]))); break;
-        case 13: { QColor _r = _t->masterColor();
+        case 13: _t->setInterval((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 14: { QColor _r = _t->masterColor();
             if (_a[0]) *reinterpret_cast< QColor*>(_a[0]) = std::move(_r); }  break;
-        case 14: _t->setMasterColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
-        case 15: _t->paintGrid((*reinterpret_cast< QPainter(*)>(_a[1]))); break;
-        case 16: _t->paintUniverse((*reinterpret_cast< QPainter(*)>(_a[1]))); break;
-        case 17: _t->newGeneration(); break;
+        case 15: _t->setMasterColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
+        case 16: _t->paintGrid((*reinterpret_cast< QPainter(*)>(_a[1]))); break;
+        case 17: _t->paintUniverse((*reinterpret_cast< QPainter(*)>(_a[1]))); break;
+        case 18: _t->newGeneration(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -208,13 +218,13 @@ int RenderArea::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 19)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 19;
     }
     return _id;
 }
