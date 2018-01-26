@@ -5,55 +5,84 @@
 	
 class EasyStrategy1 : public Strategy {
 public:	
-	void strategy( const Deck &deck, Hand hand, const bool first, int * position, int * hand_weight, std::string &name, bool &gold_winner ) override {
-		std::cout << "EasyStrategy1 is started" << std::endl;
-		name = "EasyStrategy1";
+	void strategy( Dealer & dealer, const bool first ) override {
+		if ( !dealer.f ) {
+		  std::cout << "EasyStrategy1 is started" << std::endl;
+		}
 		int i = 2;
 		if ( first ) {
-		  hand.hand_data[ 0 ] = deck.deck_data[ 0 ];
-		  hand.hand_data[ 1 ] = deck.deck_data[ 1 ];
-		  * hand_weight += hand.hand_data[ 0 ].weight;
-		  * hand_weight += hand.hand_data[ 1 ].weight;
-		  hand._size = 2;
-		  if ( hand.hand_data[ 0 ]._ace ) {
-			hand.ace_counter++;
+		  dealer.name_1 = "EasyStrategy1";
+		  dealer.number_1 = 0;
+		  dealer.hand_1.hand_data[ 0 ] = dealer.deck.deck_data[ 0 ];
+		  dealer.hand_1.hand_data[ 1 ] = dealer.deck.deck_data[ 1 ];
+		  dealer.hand_1.weight += dealer.hand_1.hand_data[ 0 ].weight;
+		  dealer.hand_1.weight += dealer.hand_1.hand_data[ 1 ].weight;
+		  dealer.hand_1._size = 2;
+		  if ( dealer.hand_1.hand_data[ 0 ]._ace ) {
+			 dealer.hand_1.ace_counter++;
 		  }
-		  if ( hand.hand_data[ 1 ]._ace ) {
-			hand.ace_counter++;
+		  if ( dealer.hand_1.hand_data[ 1 ]._ace ) {
+			 dealer.hand_1.ace_counter++;
 		  }
+		  if ( dealer.hand_1.ace_counter == 2) {
+		     dealer.gold_point_1 = true;
+		  }
+		  while ( dealer.hand_1.weight < 19 ) {	
+		    dealer.hand_1.hand_data[ i ] = dealer.deck.deck_data[ i + dealer.pos_in_deck ];
+		    dealer.hand_1.weight += dealer.hand_1.hand_data[ i ].weight;
+		    if ( dealer.hand_1.hand_data[ i ]._ace ) {
+		  	   dealer.hand_1.ace_counter++;
+		    }
+		    if ( dealer.hand_1.weight > 21 && dealer.hand_1.ace_counter > 0 ) {
+		   	   dealer.hand_1.weight -= 10;
+			   dealer.hand_1.ace_counter--;  
+		    }
+		    dealer.hand_1._size++;
+		    i++;
+		  }
+		  dealer.pos_in_deck = i;
+		  if ( !dealer.f ) {
+	  	    for ( i = 0; i < dealer.hand_1._size; ++i ) {
+		      std::cout << dealer.hand_1.hand_data[ i ].value << " " << dealer.hand_1.hand_data[ i ].suit << ", card`s weight = " << dealer.hand_1.hand_data[ i ].weight << std::endl;
+		    }
+		  }  
 		}
 		else {
-		  hand.hand_data[ 0 ] = deck.deck_data[ 2 ];	
-		  hand.hand_data[ 1 ] = deck.deck_data[ 3 ];
-		  * hand_weight += hand.hand_data[ 0 ].weight;
-		  * hand_weight += hand.hand_data[ 1 ].weight;
-		  hand._size = 2;
-		  if ( hand.hand_data[ 0 ]._ace ) {
-			hand.ace_counter++;
+		  dealer.name_2 = "EasyStrategy1";
+		  dealer.number_2 = 0;		  
+		  dealer.hand_2.hand_data[ 0 ] = dealer.deck.deck_data[ 2 ];
+		  dealer.hand_2.hand_data[ 1 ] = dealer.deck.deck_data[ 3 ];
+		  dealer.hand_2.weight += dealer.hand_2.hand_data[ 0 ].weight;
+		  dealer.hand_2.weight += dealer.hand_2.hand_data[ 1 ].weight;
+		  dealer.hand_2._size = 2;
+		  if ( dealer.hand_2.hand_data[ 0 ]._ace ) {
+			 dealer.hand_2.ace_counter++;
 		  }
-		  if ( hand.hand_data[ 1 ]._ace ) {
-			hand.ace_counter++;
+		  if ( dealer.hand_2.hand_data[ 1 ]._ace ) {
+			 dealer.hand_2.ace_counter++;
 		  }
-		}
-		if ( hand.ace_counter == 2) {
-		  gold_winner = true;
-		}
-		while ( * hand_weight < 19 ) {	
-		  hand.hand_data[ i ] = deck.deck_data[ i + 2 + * position ];
-		  * hand_weight += hand.hand_data[ i ].weight;
-		  if ( hand.hand_data[ i ]._ace ) {
-			hand.ace_counter++;
+		  if ( dealer.hand_2.ace_counter == 2) {
+		     dealer.gold_point_2 = true;
 		  }
-		  if ( * hand_weight > 21 && hand.ace_counter > 0 ) {
-			* hand_weight -= 10;
-			hand.ace_counter--;  
+		  while ( dealer.hand_2.weight < 19 ) {	
+		    dealer.hand_2.hand_data[ i ] = dealer.deck.deck_data[ i + 2 + dealer.pos_in_deck ];
+		    dealer.hand_2.weight += dealer.hand_2.hand_data[ i ].weight;
+		    if ( dealer.hand_2.hand_data[ i ]._ace ) {
+		  	   dealer.hand_2.ace_counter++;
+		    }
+		    if ( dealer.hand_2.weight > 21 && dealer.hand_2.ace_counter > 0 ) {
+		   	   dealer.hand_2.weight -= 10;
+			   dealer.hand_2.ace_counter--;  
+		    }
+		    dealer.hand_2._size++;
+		    i++;
 		  }
-		  hand._size++;
-		  i++;
-		}
-		* position = i;
-		for ( i = 0; i < hand._size; ++i ) {
-		  std::cout << hand.hand_data[ i ].value << " " << hand.hand_data[ i ].suit << " " << hand.hand_data[ i ].weight << std::endl;
+		  dealer.pos_in_deck = i;
+		  if ( !dealer.f ) {
+		    for ( i = 0; i < dealer.hand_2._size; ++i ) {
+		      std::cout << dealer.hand_2.hand_data[ i ].value << " " << dealer.hand_2.hand_data[ i ].suit << ", card`s weight = " << dealer.hand_2.hand_data[ i ].weight << std::endl;
+		    }
+		  } 
 		}
 	}	
 };

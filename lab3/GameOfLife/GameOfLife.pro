@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-11-27T16:17:17
+# Project created by QtCreator 2018-01-09 15:11:21
 #
 #-------------------------------------------------
 
@@ -11,13 +11,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GameOfLife
 TEMPLATE = app
 
+SOURCES += main.cpp \
+        mainwindow.cpp \
+    	renderarea.cpp \
+    model.cpp \
+    controller.cpp
 
-SOURCES += main.cpp\
-    renderarea.cpp \
-    window.cpp
+HEADERS  += mainwindow.h \
+    		renderarea.h \
+    model.h \
+    controller.h
 
-HEADERS  += \
-    renderarea.h \
-    window.h
-
-FORMS    += mymainwindow.ui
+FORMS    += mainwindow.ui

@@ -2,6 +2,8 @@
 #include "Factory.hpp"
 #include <iostream>
 #include <exception>
+#include <string>
+#include <memory>
 
 Card::Card() {}
 
@@ -97,189 +99,168 @@ void Deck::shuffle() {
 	  if ( i != number ) {
 	    std::swap( deck_data[ i ], deck_data[ number ] );
 	  }
-	}	
+	}
 }
 
 Hand::Hand() { hand_data.resize( defaultCapacity, Card() ); }
 
 Hand::~Hand() {}
 
-Hand::Hand( const Hand &b ) : _size( b._size ), capacity( b.capacity ), hand_data( b.hand_data ) {}
+Hand::Hand( const Hand &b ) : _size( b._size ), capacity( b.capacity ), hand_data( b.hand_data ),
+							  ace_counter( b.ace_counter ), weight( b.weight ) {}
 
-Game::Game() {}
+Dealer::Dealer() {}
+
+Dealer::~Dealer() {}
+
+void Game::who_is_winner( Dealer & dealer ) {
+  if ( ( ( dealer.hand_1.weight > dealer.hand_2.weight && dealer.hand_1.weight < 22 ) ||
+  	 ( dealer.hand_1.weight < 22 && dealer.hand_2.weight > 21 ) || ( dealer.gold_point_1 ) )
+  	 && ( !dealer.gold_point_2 ) ) {
+		victories[ dealer.number_1 ].counter++;
+		victories[ dealer.number_1 ].name = dealer.name_1;
+		std::cout << dealer.name_1 << " is winner!" << std::endl;
+  }
+  if ( ( ( dealer.hand_2.weight > dealer.hand_1.weight && dealer.hand_2.weight < 22 ) ||
+  	 ( dealer.hand_2.weight < 22 && dealer.hand_1.weight > 21 ) || ( dealer.gold_point_2 ) ) &&
+  	 ( !dealer.gold_point_1 ) ) {
+		victories[ dealer.number_2 ].counter++;
+		victories[ dealer.number_2 ].name = dealer.name_2;
+		std::cout << dealer.name_2 << " is winner!" << std::endl;
+  }
+  if ( dealer.hand_1.weight > 21 && dealer.hand_2.weight > 21 ) {
+	std::cout << "There is no winner!" << std::endl;
+  }
+  else if ( dealer.hand_1.weight == dealer.hand_2.weight ) {
+       	 std::cout << "Draw!" << std::endl;  
+       }
+}
+
+Game::Game() { victories.resize( defaultCapacity, Tmp() ); }
 
 Game::~Game() {}
 
-void Game::detailed( std::vector< Strategy * > &strats, const size_t count ) {
+void Game::detailed( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count ) {
   std::cout << "Detailed mode is started" << std::endl;
-  victory.resize( count, Tmp() );
+  std::string buf;
   int max = 0;
   int pos = 0;
   for ( size_t i = 0; i < count - 1; ++i ) {
 	for ( size_t j = i + 1; j < count; ++j ) {
-	  deck.shuffle();
-	  int * hand_weight_1 = new int;
-	  int * hand_weight_2 = new int;
-	  int * position = new int;
-	  * hand_weight_1 = 0;
-	  * hand_weight_2 = 0;
-	  * position = 0;
-	  std::string name_1;
-	  std::string name_2;
-	  bool gold_winner_1 = false;
-	  bool gold_winner_2 = false;
-      strats[ i ]->strategy( deck, Hand(), true, position, hand_weight_1, name_1, gold_winner_1 );
-	  std::cout << * hand_weight_1 << std::endl;
-      strats[ j ]->strategy( deck, Hand(), false, position, hand_weight_2, name_2, gold_winner_2 );
-	  std::cout << * hand_weight_2 << std::endl;
-	  if ( ( ( * hand_weight_1 > * hand_weight_2 && * hand_weight_1 < 22 ) || ( * hand_weight_1 < 22 && * hand_weight_2 > 21 ) || ( gold_winner_1 ) )
-		 && ( !gold_winner_2 ) ) {
-		victory[ i ].counter++;
-		victory[ i ].name = name_1;
-		std::cout << name_1 << " is winner!" << std::endl;
-	  }
-	  if ( ( ( * hand_weight_2 > * hand_weight_1 && * hand_weight_2 < 22 ) || ( * hand_weight_2 < 22 && * hand_weight_1 > 21 ) || ( gold_winner_2 ) )
-		 && ( !gold_winner_1 ) ) {
-		victory[ j ].counter++;
-		victory[ j ].name = name_2;
-		std::cout << name_2 << " is winner!" << std::endl;
-	  }
-	  if ( ( * hand_weight_1 > 21 && * hand_weight_2 > 21 ) || ( * hand_weight_1 == * hand_weight_2 ) ) {
-		std::cout << "Draw!" << std::endl;
-	  }
-	  delete hand_weight_1;
-	  delete hand_weight_2;
-	  delete position;
+	  Dealer dealer;
+	  dealer.deck.shuffle();
+	  std::getline( std::cin, buf );
+      strats[ i ]->strategy( dealer, true );
+	  std::cout << "Hand`s weight = " << dealer.hand_1.weight << std::endl;
+	  std::getline( std::cin, buf );
+      strats[ j ]->strategy( dealer, false );
+	  std::cout << "Hand`s weight = " << dealer.hand_2.weight << std::endl;
+	  std::cout << std::endl;
+	  who_is_winner( dealer );
 	}
   }
-  for ( int i = 0; i < count - 1; ++i ) {
-    if ( max < victory[ i ].counter ) {
-  	  max = victory[ i ].counter;
+  for ( int i = 0; i < count; ++i ) {
+    if ( max < victories[ i ].counter ) {
+  	  max = victories[ i ].counter;
 	  pos = i;
 	}
   }
-  std::cout << victory[ pos ].name << " is absolute winner!!!" << std::endl;
+  if ( max != 0 ) {
+  	std::cout << std::endl;
+  	std::cout << victories[ pos ].name << " is the absolute winner!!!" << std::endl;
+  }	
 }
 
-void Game::fast( std::vector< Strategy * > &strats, const size_t count ) {
+void Game::fast( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count ) {
   std::cout << "Fast mode is started" << std::endl;
-  for ( size_t i = 0; i < count - 1; ++i ) {
-	for ( size_t j = i + 1; j < count; ++j ) {
-	  deck.shuffle();
-	  int * hand_weight_1 = new int;
-	  int * hand_weight_2 = new int;
-	  int * position = new int;
-	  * hand_weight_1 = 0;
-	  * hand_weight_2 = 0;
-	  * position = 0;
-	  std::string name_1;
-	  std::string name_2;
-	  bool gold_winner_1 = false;
-	  bool gold_winner_2 = false;
-      strats[ i ]->strategy( deck, Hand(), true, position, hand_weight_1, name_1, gold_winner_1 );
-	  std::cout << * hand_weight_1 << std::endl;
-      strats[ j ]->strategy( deck, Hand(), false, position, hand_weight_2, name_2, gold_winner_2 );
-	  std::cout << * hand_weight_2 << std::endl;
-	  if ( ( ( * hand_weight_1 > * hand_weight_2 && * hand_weight_1 < 22 ) || ( * hand_weight_1 < 22 && * hand_weight_2 > 21 ) || ( gold_winner_1 ) )
-		 && ( !gold_winner_2 ) ) {
-		std::cout << name_1 << " is winner!" << std::endl;
-	  }
-	  if ( ( ( * hand_weight_2 > * hand_weight_1 && * hand_weight_2 < 22 ) || ( * hand_weight_2 < 22 && * hand_weight_1 > 21 ) || ( gold_winner_2 ) )
-		 && ( !gold_winner_1 ) ) {
-		std::cout << name_2 << " is winner!" << std::endl;
-	  }
-	  if ( ( * hand_weight_1 > 21 && * hand_weight_2 > 21 ) || ( * hand_weight_1 == * hand_weight_2 ) ) {
-		std::cout << "Draw!" << std::endl;
-	  }
-	  delete hand_weight_1;
-	  delete hand_weight_2;
-	  delete position;
-	}
-  }
-}
-
-void Game::tournament( std::vector< Strategy * > &strats, const size_t count ) {
-  std::cout << "Tournament mode is started" << std::endl;
-  victory.resize( count, Tmp() );
   int max = 0;
   int pos = 0;
   for ( size_t i = 0; i < count - 1; ++i ) {
 	for ( size_t j = i + 1; j < count; ++j ) {
-	  deck.shuffle();
-	  int * hand_weight_1 = new int;
-	  int * hand_weight_2 = new int;
-	  int * position = new int;
-	  * hand_weight_1 = 0;
-	  * hand_weight_2 = 0;
-	  * position = 0;
-	  std::string name_1;
-	  std::string name_2;
-	  bool gold_winner_1 = false;
-	  bool gold_winner_2 = false;
-      strats[ i ]->strategy( deck, Hand(), true, position, hand_weight_1, name_1, gold_winner_1 );
-	  std::cout << * hand_weight_1 << std::endl;
-      strats[ j ]->strategy( deck, Hand(), false, position, hand_weight_2, name_2, gold_winner_2 );
-	  std::cout << * hand_weight_2 << std::endl;
-	  if ( ( ( * hand_weight_1 > * hand_weight_2 && * hand_weight_1 < 22 ) || ( * hand_weight_1 < 22 && * hand_weight_2 > 21 ) || ( gold_winner_1 ) )
-		 && ( !gold_winner_2 ) ) {
-		victory[ i ].counter++;
-		victory[ i ].name = name_1;
-		std::cout << name_1 << " is winner!" << std::endl;
-	  }
-	  if ( ( ( * hand_weight_2 > * hand_weight_1 && * hand_weight_2 < 22 ) || ( * hand_weight_2 < 22 && * hand_weight_1 > 21 ) || ( gold_winner_2 ) )
-		 && ( !gold_winner_1 ) ) {
-		victory[ j ].counter++;
-		victory[ j ].name = name_2;
-		std::cout << name_2 << " is winner!" << std::endl;
-	  }
-	  if ( ( * hand_weight_1 > 21 && * hand_weight_2 > 21 ) || ( * hand_weight_1 == * hand_weight_2 ) ) {
-		std::cout << "Draw!" << std::endl;
-	  }
-	  delete hand_weight_1;
-	  delete hand_weight_2;
-	  delete position;
+	  Dealer dealer;	
+	  dealer.deck.shuffle();
+	  dealer.f = true;
+	  std::cout << std::endl;
+      strats[ i ]->strategy( dealer, true );
+	  std::cout << "First hand`s weight = " << dealer.hand_1.weight << std::endl;
+	  std::cout << std::endl;
+      strats[ j ]->strategy( dealer, false );
+	  std::cout << "Second hand`s weight = " << dealer.hand_2.weight << std::endl;
+	  std::cout << std::endl;
+	  who_is_winner( dealer );
 	}
   }
-  for ( int i = 0; i < count - 1; ++i ) {
-    if ( max < victory[ i ].counter ) {
-  	  max = victory[ i ].counter;
+  for ( int i = 0; i < count; ++i ) {
+    if ( max < victories[ i ].counter ) {
+  	  max = victories[ i ].counter;
 	  pos = i;
 	}
   }
-  std::cout << victory[ pos ].name << " is winner of tournament!!!" << std::endl;
+  if ( max != 0 ) {
+  	std::cout << std::endl;
+    std::cout << victories[ pos ].name << " is the awesome winner!!!" << std::endl;
+  }
+}
+
+void Game::tournament( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count ) {
+  std::cout << "Tournament mode is started" << std::endl;
+  int max = 0;
+  int pos = 0;
+  for ( size_t i = 0; i < count - 1; ++i ) {
+	for ( size_t j = i + 1; j < count; ++j ) {
+	  Dealer dealer;
+	  dealer.deck.shuffle();
+	  std::cout << std::endl;
+      strats[ i ]->strategy( dealer, true );
+	  std::cout << "Hand`s weight = " << dealer.hand_1.weight << std::endl;
+	  std::cout << std::endl;
+      strats[ j ]->strategy( dealer, false );
+	  std::cout << "Hand`s weight = " << dealer.hand_2.weight << std::endl;
+	  std::cout << std::endl;
+	  who_is_winner( dealer );
+	}
+  }
+  for ( int i = 0; i < count; ++i ) {
+    if ( max < victories[ i ].counter ) {
+  	  max = victories[ i ].counter;
+	  pos = i;
+	}
+  }
+  if ( max != 0 ) {
+  	std::cout << std::endl;
+    std::cout << victories[ pos ].name << " is the winner of tournament!!!" << std::endl;
+  }
 }
 
 int main( int argc, char *argv[] ) {
 		
 	Game game;
 	
-	std::vector< Strategy * > strats;
+	std::vector< std::unique_ptr<Strategy> > strats;
 
-	if ( argc < 3 ) {
+	if ( argc < 4 ) {
 	  std::cout << "Please give me players!" << std::endl;
 	  return -1;
 	}
+
+	std::cout << std::endl;
 	
 	Factory< Strategy, Strategy*(*)(), std::string > * f = Factory< Strategy, Strategy*(*)(), std::string >::get_instance(); 
 
-	for ( int i = 1; i < argc; ++i ){
-	  strats.push_back( f->create( argv[ i ] ) );	
+	for ( int i = 2; i < argc; ++i ){
+	  strats.emplace_back( f->create( argv[ i ] ) );	
 	}
 	
-	if ( argc == 4 ) {
-	  game.detailed( strats, argc - 1 );	
+	if ( std::string( argv[ 1 ] ) == "detailed" ) {
+	  game.detailed( strats, argc - 2 );	
 	}
 	
-	if ( argc == 3 ) {
-	  game.fast( strats, argc - 1 );	
+	if ( ( argc == 4 && std::string( argv[ 1 ] ) != "tournament" && std::string( argv[ 1 ] ) != "detailed" ) || std::string( argv[ 1 ] ) == "fast" ) {
+	  game.fast( strats, argc - 2 );	
 	}
 	
-	if ( argc > 4 ) {
-	  game.tournament( strats, argc - 1 );	
-	}
-	
-	for ( Strategy * st : strats ) {
-	  delete st;
+	if ( ( argc > 4 && std::string( argv[ 1 ] ) != "fast" && std::string( argv[ 1 ] ) != "detailed" ) || std::string( argv[ 1 ] ) == "tournament" ) {
+	  game.tournament( strats, argc - 2 );	
 	}
 	
 }

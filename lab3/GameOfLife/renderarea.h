@@ -1,26 +1,58 @@
 #ifndef RENDERAREA_H
 #define RENDERAREA_H
 
+#include <QColor>
 #include <QWidget>
-#include <QTimer>
 
 class RenderArea : public QWidget
 {
-    Q_OBJECT
-
+Q_OBJECT
 public:
-    RenderArea(QWidget *parent = 0);
+    explicit RenderArea(QWidget *parent = 0);
+    ~RenderArea();
 
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+protected:
+    void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
+
+signals:
+    void environmentChanged(bool ok);
+    void gameEnds(bool ok);
+    void nextGeneration(bool ok);
 
 public slots:
-    void tick();
-protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    bool flag = false;
-    QTimer timer;
+    void startGame();
+    void stopGame();
+
+    void clear();
+    void setRule();
+    void setHeight();
+    void setWidth();
+    void loadGame();
+    void needUpdate();
+
+    int interval();
+    void setInterval(const int msec);
+
+    QColor masterColor();
+    void setMasterColor(const QColor &color);
+
+private slots:
+    void paintGrid(QPainter &p);
+    void paintUniverse(QPainter &p);
+    void newGeneration();
+
+private:
+    QColor m_masterColor;
+    QTimer* timer;
+    int generations;
+    bool* universe;
+    bool* next;
+    int height_;
+    int width_;
+    QString rule;
 };
 
 #endif // RENDERAREA_H

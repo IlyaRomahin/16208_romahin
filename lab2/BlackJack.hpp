@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 class Card {
 public:
@@ -17,7 +18,7 @@ public:
   std::string suit;
   int weight = 0;
   bool _ace = false;
-private:	
+private:
   const std::string spades = "spades";
   const std::string hearts = "hearts";
   const std::string clubs = "clubs";
@@ -49,7 +50,8 @@ public:
   Hand();
   ~Hand();
   Hand( const Hand &b );
-  std::vector< Card > hand_data;	
+  std::vector< Card > hand_data;
+  int weight = 0;	
   int _size = 0;
   int ace_counter = 0;
 private:	
@@ -57,9 +59,26 @@ private:
   size_t capacity = defaultCapacity;
 };
 
-class Strategy { // Интерфейс
+class Dealer {
+public:	
+  Dealer();
+  ~Dealer();	
+  Deck deck;
+  int pos_in_deck = 0;
+  size_t number_1 = 0;
+  size_t number_2 = 0;
+  bool gold_point_1 = false;
+  bool gold_point_2 = false;
+  bool f = false;
+  std::string name_1;
+  std::string name_2; 
+  Hand hand_1;
+  Hand hand_2;
+};
+
+class Strategy {
 public:
-	virtual void strategy( const Deck &deck, Hand hand, const bool first, int * position, int * hand_weight, std::string &strategy_name, bool &gold_winner ) = 0;
+	virtual void strategy( Dealer & dealer, const bool first ) = 0;
 	
 	virtual ~Strategy() {}
 };
@@ -68,18 +87,20 @@ class Game {
 public:	
   Game();
   ~Game();
-  void detailed( std::vector< Strategy * > &strats, const size_t count );
-  void fast( std::vector< Strategy * > &strats, const size_t count );
-  void tournament( std::vector< Strategy * > &strats, const size_t count );
-private:
+  void who_is_winner( Dealer & dealer );
+  void detailed( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count );
+  void fast( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count );
+  void tournament( std::vector< std::unique_ptr<Strategy> > &strats, const size_t count );
   struct Tmp {
     size_t counter = 0;
     std::string name;
-	Tmp() {}
-	~Tmp() {}
+    Tmp() {}
+    ~Tmp() {}
   };
-  std::vector< Tmp > victory;
-  Deck deck;	
+  std::vector< Tmp > victories;
+  private:
+    size_t static const defaultCapacity = 128;
+    size_t capacity = defaultCapacity;
 };
 
 #endif
