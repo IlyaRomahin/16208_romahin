@@ -28,6 +28,7 @@ signals:
     void saveButclicked(bool ok);
     void loadButclicked(bool ok);
     void colorButclicked(bool ok);
+    void scrollButclicked(bool ok);
     void rulesContValueChanged(QString);
     void iterInterValueChanged(int);
     void heightContValueChanged(int);
@@ -48,10 +49,14 @@ public slots:
     void setMasterColor(const QColor &color);
     void setNext(std::vector<bool> &n);
     void setUniverse(std::vector<bool> &u);
+    void setEnabledSpinBoxes();
+    void setEnabledBoxes();
+    void setDisabledBoxes();
     void needUpdate();
     void startBut();
     void stopBut();
     void clearBut();
+    void scrollBut();
     void saveBut();
     void loadBut();
     void colorBut();

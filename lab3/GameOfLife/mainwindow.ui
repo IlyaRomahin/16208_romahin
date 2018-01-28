@@ -11,14 +11,32 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Game of Life</string>
+   <string>Game of Life by Ilya Romakhin 16208</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QHBoxLayout" name="mainLayout">
       <item>
-       <layout class="QVBoxLayout" name="gameLayout"/>
+       <layout class="QVBoxLayout" name="gameLayout">
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>414</width>
+             <height>476</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="setLayout">
@@ -67,7 +85,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>AliveCells</string>
+           <string>If Alive</string>
           </property>
          </widget>
         </item>
@@ -138,7 +156,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>DeadCells</string>
+           <string>If Dead</string>
           </property>
          </widget>
         </item>
@@ -273,7 +291,7 @@
            <string> ms</string>
           </property>
           <property name="minimum">
-           <number>50</number>
+           <number>10</number>
           </property>
           <property name="maximum">
            <number>100000</number>
@@ -283,6 +301,13 @@
           </property>
           <property name="value">
            <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="scrollButton">
+          <property name="text">
+           <string>Return to normal zoom</string>
           </property>
          </widget>
         </item>

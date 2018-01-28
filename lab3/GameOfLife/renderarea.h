@@ -18,7 +18,6 @@ protected:
 
 signals:
     void environmentChanged(bool ok);
-    void gameEnds(bool ok);
     void nextGeneration(bool ok);
 
 public slots:
@@ -41,6 +40,8 @@ public slots:
     QColor masterColor();
     void setMasterColor(const QColor &color);
 
+    void returnToNormalZoom();
+
 private slots:
     void paintGrid(QPainter &p);
     void paintUniverse(QPainter &p);
@@ -54,7 +55,8 @@ private:
     std::vector<bool> next;
     int height_;
     int width_;
-    QString rule;
+    double normalHeight;
+    double normalWidth;
 };
 
 #endif // RENDERAREA_H

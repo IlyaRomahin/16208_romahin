@@ -6,7 +6,6 @@
 #include <QPainter>
 #include <qmath.h>
 #include "renderarea.h"
-#include <iostream>
 
 RenderArea::RenderArea(QWidget *parent) :
     QWidget(parent),
@@ -14,7 +13,8 @@ RenderArea::RenderArea(QWidget *parent) :
     generations(-1),
     height_(50),
     width_(50),
-    rule("Conway`s")
+    normalHeight(0),
+    normalWidth(0)
 {
     timer->setInterval(100);
     m_masterColor = "#000";
@@ -56,12 +56,16 @@ void RenderArea::setUniverse(std::vector<bool> &u)
 void RenderArea::setHeight(const int h)
 {
     height_ = h;
+    universe.resize(((height_ + 2) * (width_ + 2)), bool());
+    next.resize(((height_ + 2) * (width_ + 2)), bool());
     update();
 }
 
 void RenderArea::setWidth(const int w)
 {
     width_ = w;
+    universe.resize(((height_ + 2) * (width_ + 2)), bool());
+    next.resize(((height_ + 2) * (width_ + 2)), bool());
     update();
 }
 
@@ -85,6 +89,13 @@ void RenderArea::setInterval(const int msec)
     timer->setInterval(msec);
 }
 
+void RenderArea::returnToNormalZoom()
+{
+    if (normalWidth != 0 && normalHeight != 0){
+        setFixedSize(normalWidth, normalHeight);
+    }
+}
+
 void RenderArea::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
@@ -94,12 +105,23 @@ void RenderArea::paintEvent(QPaintEvent *)
 
 void RenderArea::mousePressEvent(QMouseEvent *e)
 {
-    emit environmentChanged(true);
+    emit(environmentChanged(true));
     double cellWidth = (double)width() / width_;
     double cellHeight = (double)height() / height_;
-    int k = floor(e->y() / cellHeight) + 1;
-    int j = floor(e->x() / cellWidth) + 1;
-    universe[k * width_ + j] = !universe[k * width_ + j];
+    int k = 0;
+    int j = 0;
+    if (0 < e->y() && e->y() < height())
+    {
+        k = floor(e->y() / cellHeight) + 1;
+    }
+    if (0 < e->x() && e->x() < width())
+    {
+        j = floor(e->x() / cellWidth) + 1;
+    }
+    if (k != 0 && j != 0)
+    {
+        universe[k * width_ + j] = !universe[k * width_ + j];
+    }
     update();
 }
 
@@ -107,22 +129,37 @@ void RenderArea::mouseMoveEvent(QMouseEvent *e)
 {
     double cellWidth = (double)width() / width_;
     double cellHeight = (double)height() / height_;
-    int k = floor(e->y() / cellHeight) + 1;
-    int j = floor(e->x() / cellWidth) + 1;
-    int currentLocation = k * width_ + j;
-    if (!universe[currentLocation]) {
-        universe [currentLocation] = !universe[currentLocation];
-        update();
+    int k = 0;
+    int j = 0;
+    if (0 < e->y() && e->y() < height())
+    {
+        k = floor(e->y() / cellHeight) + 1;
+    }
+    if (0 < e->x() && e->x() < width())
+    {
+        j = floor(e->x() / cellWidth) + 1;
+    }
+    if (k != 0 && j != 0){
+        int currentLocation = k * width_ + j;
+        if (!universe[currentLocation]) {
+            universe [currentLocation] = !universe[currentLocation];
+            update();
+        }
     }
 }
 
 void RenderArea::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() > 0) {
+        if (normalHeight == 0 && normalWidth == 0)
+        {
+            normalHeight = height();
+            normalWidth = width();
+        }
         setFixedSize(width()*1.15, height()*1.15);
     }
     if (e->delta() < 0) {
-        setFixedSize(width()*0.85, height()*0.85);
+        setFixedSize(width()/1.15, height()/1.15);
     }
 }
 

@@ -12,6 +12,8 @@ signals:
     void finishGame(bool ok);
     void lostGame(bool ok);
     void needUpdate(bool ok);
+    void myRule(bool ok);
+    void notMyRule(bool ok);
 public:
     explicit Model(QWidget *parent = 0);
     ~Model();
@@ -36,7 +38,7 @@ private:
     std::vector<bool> next;
     int height;
     int width;
-    std::string rule = "Conway`s";
+    std::string rule;
     bool isAlive(int k, int j);
     void resetUniverse();
 };

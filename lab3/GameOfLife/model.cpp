@@ -1,7 +1,6 @@
 #include "model.h"
 #include <fstream>
 #include <algorithm>
-#include <iostream>
 #include <cstring>
 
 Model::Model(QWidget *parent) :
@@ -62,6 +61,12 @@ std::string Model::gameRule()
 void Model::setRule(const std::string &r)
 {
     rule = r;
+    if (rule != "My rule")
+    {
+        emit(notMyRule(true));
+    } else {
+        emit(myRule(true));
+    }
 }
 
 int Model::heightCellNumber()
@@ -72,6 +77,8 @@ int Model::heightCellNumber()
 void Model::setHeightCellNumber(const int h)
 {
     height = h;
+    universe.resize(((height + 2) * (width + 2)), bool());
+    next.resize(((height + 2) * (width + 2)), bool());
     resetUniverse();
 }
 
@@ -83,6 +90,8 @@ int Model::widthCellNumber()
 void Model::setWidthCellNumber(const int w)
 {
     width = w;
+    universe.resize(((height + 2) * (width + 2)), bool());
+    next.resize(((height + 2) * (width + 2)), bool());
     resetUniverse();
 }
 
@@ -160,30 +169,31 @@ bool Model::isAlive(int k, int j)
     power += universe[(k - 1) * width + (j + 1)];
     power += universe[(k - 1) * width + (j - 1)];
     power += universe[(k + 1) * width +  (j + 1)];
+
     if (rule == "Conway`s" && (((universe[k * width + j] == true) && (power == 2)) || (power == 3)))
     {
-           return true;
+        return true;
     }
     if (rule == "HighLife" && (((universe[k * width + j] == true) && (power == 2)) || (power == 3) || (power == 6)))
     {
-           return true;
+        return true;
     }
     if (rule == "Day & Night" && (((universe[k * width + j] == true) && (power == 4)) ||
        (power == 3) || (power == 6) || (power == 7) || (power == 8)))
     {
-           return true;
+        return true;
     }
     if (rule == "Life without Death" && ((universe[k * width + j] == true) || power == 3))
     {
-           return true;
+        return true;
     }
     if (rule == "Seeds" && power == 2)
     {
-           return true;
+        return true;
     }
-    if (rule == "Your rule")
+    if (rule == "My rule")
     {
-
+        return true;
     }
     return false;
 }

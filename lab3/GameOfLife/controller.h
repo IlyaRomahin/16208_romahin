@@ -10,17 +10,15 @@ Q_OBJECT
 public:
     Controller(QWidget *parent, Model *m, MainWindow *w);
 
-signals:
-    void environmentChanged(bool ok);
-    void gameEnds(bool ok);
-
 public slots:
-    void saveGame();
-    void loadGame();
+    void saveGame(bool);
+    void loadGame(bool);
     void startGame(bool);
-    void stopGame();
-    void clear();
-    void selectMasterColor();
+    void stopGame(bool);
+    void clear(bool);
+    void selectMasterColor(bool);
+    void myRule(bool);
+    void notMyRule(bool);
 
     QString gameRule();
     void setRule(const QString &r);
@@ -38,10 +36,10 @@ public slots:
     void setMasterColor(const QColor &color);
 
 private slots:
-    void newGeneration();
-    void finishGame();
-    void lostGame();
-    void needUpdate();
+    void newGeneration(bool);
+    void finishGame(bool);
+    void lostGame(bool);
+    void needUpdate(bool);
 
 private:
     Model *model;

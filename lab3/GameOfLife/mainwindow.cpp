@@ -28,26 +28,26 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->heightControl, SIGNAL(valueChanged(int)), this, SLOT(heightCont(int)));
     connect(ui->widthControl, SIGNAL(valueChanged(int)), this, SLOT(widthCont(int)));
     connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(colorBut()));
+    connect(ui->scrollButton, SIGNAL(clicked()), this, SLOT(scrollBut()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadBut()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveBut()));
 
-    connect(field, SIGNAL(gameEnds(bool)), ui->rulesControl, SLOT(setEnabled(bool)));
-    connect(field, SIGNAL(gameEnds(bool)), ui->heightControl, SLOT(setEnabled(bool)));
-    connect(field, SIGNAL(gameEnds(bool)), ui->widthControl, SLOT(setEnabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->heightControl, SLOT(setDisabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->widthControl, SLOT(setDisabled(bool)));
-    connect(field, SIGNAL(nextGeneration(bool)), this, SLOT(newGeneration(bool)));
+    connect(field, &RenderArea::nextGeneration, [this](bool b){newGeneration(b);});
 
     ui->rulesControl->addItem( "Conway`s" );
     ui->rulesControl->addItem( "HighLife" );
     ui->rulesControl->addItem( "Day & Night" );
     ui->rulesControl->addItem( "Life without Death" );
     ui->rulesControl->addItem( "Seeds" );
-    ui->rulesControl->addItem( "Your rule" );
+    ui->rulesControl->addItem( "My rule" );
 
     ui->mainLayout->setStretchFactor(ui->gameLayout, 8);
     ui->mainLayout->setStretchFactor(ui->setLayout, 2);
-    ui->gameLayout->addWidget(field);
+    ui->gameLayout->setStretchFactor(ui->scrollArea, 8);
+    ui->scrollArea->setWidget(field);
+    setDisabledBoxes();
 }
 
 MainWindow::~MainWindow()
@@ -96,6 +96,52 @@ void MainWindow::setWidth(const int w)
     field->setWidth(w);
 }
 
+void MainWindow::setEnabledSpinBoxes()
+{
+    ui->widthControl->setEnabled(true);
+    ui->heightControl->setEnabled(true);
+}
+
+void MainWindow::setEnabledBoxes()
+{
+    ui->ac1->setEnabled(true);
+    ui->ac2->setEnabled(true);
+    ui->ac3->setEnabled(true);
+    ui->ac4->setEnabled(true);
+    ui->ac5->setEnabled(true);
+    ui->ac6->setEnabled(true);
+    ui->ac7->setEnabled(true);
+    ui->ac8->setEnabled(true);
+    ui->dc1->setEnabled(true);
+    ui->dc2->setEnabled(true);
+    ui->dc3->setEnabled(true);
+    ui->dc4->setEnabled(true);
+    ui->dc5->setEnabled(true);
+    ui->dc6->setEnabled(true);
+    ui->dc7->setEnabled(true);
+    ui->dc8->setEnabled(true);
+}
+
+void MainWindow::setDisabledBoxes()
+{
+    ui->ac1->setDisabled(true);
+    ui->ac2->setDisabled(true);
+    ui->ac3->setDisabled(true);
+    ui->ac4->setDisabled(true);
+    ui->ac5->setDisabled(true);
+    ui->ac6->setDisabled(true);
+    ui->ac7->setDisabled(true);
+    ui->ac8->setDisabled(true);
+    ui->dc1->setDisabled(true);
+    ui->dc2->setDisabled(true);
+    ui->dc3->setDisabled(true);
+    ui->dc4->setDisabled(true);
+    ui->dc5->setDisabled(true);
+    ui->dc6->setDisabled(true);
+    ui->dc7->setDisabled(true);
+    ui->dc8->setDisabled(true);
+}
+
 void MainWindow::needUpdate()
 {
     field->needUpdate();
@@ -119,7 +165,6 @@ void MainWindow::setInterval(const int msec)
 void MainWindow::startBut()
 {
     emit startButclicked(true);
-    std::cout << "bnbnj" << std::endl;
 }
 
 void MainWindow::stopBut()
@@ -145,6 +190,11 @@ void MainWindow::loadBut()
 void MainWindow::colorBut()
 {
     emit(colorButclicked(true));
+}
+
+void MainWindow::scrollBut()
+{
+    field->returnToNormalZoom();
 }
 
 void MainWindow::rulesCont(QString r)

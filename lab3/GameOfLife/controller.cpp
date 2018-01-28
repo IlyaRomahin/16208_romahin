@@ -9,94 +9,90 @@
 #include <QColor>
 #include <QColorDialog>
 #include <QMessageBox>
-#include <iostream>
+
 Controller::Controller(QWidget *parent, Model *m, MainWindow *w) :
     QWidget(parent),
     model(m),
     view(w)
 {
+    connect(view, &MainWindow::startButclicked, [this](bool b){startGame(b);});
+    connect(view, &MainWindow::stopButclicked, [this](bool b){stopGame(b);});
+    connect(view, &MainWindow::clearButclicked, [this](bool b){clear(b);});
+    connect(view, &MainWindow::rulesContValueChanged, [this](QString r){setRule(r);});
+    connect(view, &MainWindow::iterInterValueChanged, [this](int it){setInterval(it);});
+    connect(view, &MainWindow::heightContValueChanged, [this](int h){setHeight(h);});
+    connect(view, &MainWindow::widthContValueChanged, [this](int w){setWidth(w);});
+    connect(view, &MainWindow::colorButclicked, [this](bool b){selectMasterColor(b);});
+    connect(view, &MainWindow::loadButclicked, [this](bool b){loadGame(b);});
+    connect(view, &MainWindow::saveButclicked, [this](bool b){saveGame(b);});
 
-    connect(view, SIGNAL(startButclicked(bool)), this, SLOT(startGame(bool)));
-    connect(view, SIGNAL(stopButclicked(bool)), this, SLOT(stopGame()));
-    connect(view, SIGNAL(clearButclicked(bool)), this, SLOT(clear()));
-    connect(view, SIGNAL(rulesContValueChanged(QString)), this, SLOT(setRule(QString)));
-    connect(view, SIGNAL(iterInterValueChanged(int)), this, SLOT(setInterval(int)));
-    connect(view, SIGNAL(heightContValueChanged(int)), this, SLOT(setHeight(int)));
-    connect(view, SIGNAL(widthContValueChanged(int)), this, SLOT(setWidth(int)));
-    connect(view, SIGNAL(colorButclicked(bool)), this, SLOT(selectMasterColor()));
-    connect(view, SIGNAL(loadButclicked(bool)), this, SLOT(loadGame()));
-    connect(view, SIGNAL(saveButclicked(bool)), this, SLOT(saveGame()));
-
-    connect(view, SIGNAL(nextGeneration(bool)), this, SLOT(newGeneration()));
-    connect(model, SIGNAL(finishGame(bool)), this, SLOT(finishGame()));
-    connect(model, SIGNAL(lostGame(bool)), this, SLOT(lostGame()));
-    connect(model, SIGNAL(needUpdate(bool)), this, SLOT(needUpdate()));
+    connect(view, &MainWindow::nextGeneration, [this](bool b){newGeneration(b);});
+    connect(model, &Model::finishGame, [this](bool b){finishGame(b);});
+    connect(model, &Model::lostGame, [this](bool b){lostGame(b);});
+    connect(model, &Model::needUpdate, [this](bool b){needUpdate(b);});
+    connect(model, &Model::myRule, [this](bool b){myRule(b);});
+    connect(model, &Model::notMyRule, [this](bool b){notMyRule(b);});
 }
 
-void Controller::selectMasterColor()
+void Controller::selectMasterColor(bool)
 {
     view->selectMasterColor();
 }
 
-void Controller::finishGame()
+void Controller::finishGame(bool)
 {
     QMessageBox::information(this,
                              tr("Game finished."),
                              tr("Iterations finished."),
                              QMessageBox::Ok,
                              QMessageBox::Cancel);
-    stopGame();
-    emit(gameEnds(true));
+    stopGame(true);
 }
 
-void Controller::lostGame()
+void Controller::lostGame(bool)
 {
     QMessageBox::information(this,
                                 tr("Game lost sense"),
                                 tr("The End. Now game finished because all the next generations will be the same."),
                                 QMessageBox::Ok);
-    stopGame();
-    emit(gameEnds(true));
+    stopGame(true);
 }
 
-void Controller::needUpdate()
+void Controller::needUpdate(bool)
 {
     view->setNext(model->getNext());
     view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
     view->needUpdate();
+}
+
+void Controller::myRule(bool)
+{
+    view->setEnabledBoxes();}
+
+void Controller::notMyRule(bool)
+{
+    view->setDisabledBoxes();
 }
 
 void Controller::startGame(bool)
 {
-    std::cout<<"jsfjkhsdjkfkjdsf"<<std::endl;
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
     model->setUniverse(view->getUniverse());
     model->setNext(view->getNext());
     model->setGenerations(-1);
     view->startGame();
 }
 
-void Controller::stopGame()
+void Controller::stopGame(bool)
 {
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
     view->stopGame();
+    view->setEnabledSpinBoxes();
 }
 
-void Controller::clear()
+void Controller::clear(bool)
 {
     model->clear();
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
-    emit(gameEnds(true));
-    view->needUpdate();
+    needUpdate(true);
+    stopGame(true);
 }
 
 QString Controller::gameRule()
@@ -108,11 +104,6 @@ void Controller::setRule(const QString &r)
 {
     std::string rule = r.toStdString();
     model->setRule(rule);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
-    view->needUpdate();
 }
 
 int Controller::cellsHeight()
@@ -124,10 +115,6 @@ void Controller::setHeight(const int h)
 {
     model->setHeightCellNumber(h);
     view->setHeight(h);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
 }
 
 int Controller::cellsWidth()
@@ -138,16 +125,10 @@ int Controller::cellsWidth()
 void Controller::setWidth(const int w)
 {
     model->setWidthCellNumber(w);
-    view->setWidth(w);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
-}
+    view->setWidth(w);}
 
-void Controller::newGeneration()
+void Controller::newGeneration(bool)
 {
-    std::cout << "bbb" << std::endl;
     model->newGeneration();
 }
 
@@ -159,10 +140,6 @@ int Controller::interval()
 void Controller::setInterval(const int msec)
 {
     view->setInterval(msec);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
 }
 
 QColor Controller::masterColor()
@@ -173,13 +150,9 @@ QColor Controller::masterColor()
 void Controller::setMasterColor(const QColor &color)
 {
     view->setMasterColor(color);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
 }
 
-void Controller::saveGame()
+void Controller::saveGame(bool)
 {
     QString filename = QFileDialog::getSaveFileName(this,
                                                     tr("Save current game"),
@@ -201,7 +174,7 @@ void Controller::saveGame()
     file.close();
 }
 
-void Controller::loadGame()
+void Controller::loadGame(bool)
 {
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("Open saved game"),
@@ -241,9 +214,5 @@ void Controller::loadGame()
 //    in >> r; // r will be interval number
 //    view->iterInterval->setValue(r);
 //    game->setInterval(r);
-    view->setNext(model->getNext());
-    view->setUniverse(model->getUniverse());
-    model->setUniverse(view->getUniverse());
-    model->setNext(view->getNext());
-    view->needUpdate();
+    needUpdate(true);
 }
