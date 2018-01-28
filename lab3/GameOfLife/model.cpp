@@ -77,8 +77,6 @@ int Model::heightCellNumber()
 void Model::setHeightCellNumber(const int h)
 {
     height = h;
-    universe.resize(((height + 2) * (width + 2)), bool());
-    next.resize(((height + 2) * (width + 2)), bool());
     resetUniverse();
 }
 
@@ -90,8 +88,6 @@ int Model::widthCellNumber()
 void Model::setWidthCellNumber(const int w)
 {
     width = w;
-    universe.resize(((height + 2) * (width + 2)), bool());
-    next.resize(((height + 2) * (width + 2)), bool());
     resetUniverse();
 }
 
@@ -216,7 +212,7 @@ void Model::newGeneration()
     }
     for (int k = 1; k <= height; k++) {
         for (int j = 1; j <= width; j++) {
-            universe[k * height + j] = next[k * width + j];
+            universe[k * width + j] = next[k * width + j];
         }
     }
     emit(needUpdate(true));
