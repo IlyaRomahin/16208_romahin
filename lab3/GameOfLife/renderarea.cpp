@@ -150,12 +150,12 @@ void RenderArea::mouseMoveEvent(QMouseEvent *e)
 
 void RenderArea::wheelEvent(QWheelEvent *e)
 {
+    if (normalHeight == 0 && normalWidth == 0)
+    {
+        normalHeight = height();
+        normalWidth = width();
+    }
     if (e->delta() > 0) {
-        if (normalHeight == 0 && normalWidth == 0)
-        {
-            normalHeight = height();
-            normalWidth = width();
-        }
         setFixedSize(width()*1.15, height()*1.15);
     }
     if (e->delta() < 0) {
