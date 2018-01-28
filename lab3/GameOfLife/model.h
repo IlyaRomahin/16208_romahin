@@ -8,12 +8,14 @@
 class Model : public QWidget
 {
 Q_OBJECT
+
 signals:
     void finishGame(bool ok);
     void lostGame(bool ok);
     void needUpdate(bool ok);
     void myRule(bool ok);
     void notMyRule(bool ok);
+
 public:
     explicit Model(QWidget *parent = 0);
     ~Model();
@@ -32,12 +34,17 @@ public:
     std::vector<bool> &getUniverse();
     void setUniverse(std::vector<bool> &u);
     void setNext(std::vector<bool> &n);
+    void setBirth(const int b);
+    void setLife(const int l);
+
 private:
     int generations;
     std::vector<bool> universe;
     std::vector<bool> next;
     int height;
     int width;
+    int birth;
+    int life;
     std::string rule;
     bool isAlive(int k, int j);
     void resetUniverse();

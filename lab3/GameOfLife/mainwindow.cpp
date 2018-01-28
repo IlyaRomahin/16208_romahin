@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     currentColor(QColor("#000")),
-    field(new RenderArea(this))
+    field(new RenderArea(this)),
+    birth(0),
+    life(0)
 {
     ui->setupUi(this);
 
@@ -33,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(field, SIGNAL(environmentChanged(bool)), ui->heightControl, SLOT(setDisabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->widthControl, SLOT(setDisabled(bool)));
     connect(field, &RenderArea::nextGeneration, [this](bool b){newGeneration(b);});
+    connect(field, &RenderArea::needCheck, [this](bool b){check(b);});
 
     ui->rulesControl->addItem( "Conway`s" );
     ui->rulesControl->addItem( "HighLife" );
@@ -102,42 +105,42 @@ void MainWindow::setEnabledSpinBoxes()
 
 void MainWindow::setEnabledBoxes()
 {
-    ui->ac1->setEnabled(true);
-    ui->ac2->setEnabled(true);
-    ui->ac3->setEnabled(true);
-    ui->ac4->setEnabled(true);
-    ui->ac5->setEnabled(true);
-    ui->ac6->setEnabled(true);
-    ui->ac7->setEnabled(true);
-    ui->ac8->setEnabled(true);
-    ui->dc1->setEnabled(true);
-    ui->dc2->setEnabled(true);
-    ui->dc3->setEnabled(true);
-    ui->dc4->setEnabled(true);
-    ui->dc5->setEnabled(true);
-    ui->dc6->setEnabled(true);
-    ui->dc7->setEnabled(true);
-    ui->dc8->setEnabled(true);
+    ui->lc1->setEnabled(true);
+    ui->lc2->setEnabled(true);
+    ui->lc3->setEnabled(true);
+    ui->lc4->setEnabled(true);
+    ui->lc5->setEnabled(true);
+    ui->lc6->setEnabled(true);
+    ui->lc7->setEnabled(true);
+    ui->lc8->setEnabled(true);
+    ui->bc1->setEnabled(true);
+    ui->bc2->setEnabled(true);
+    ui->bc3->setEnabled(true);
+    ui->bc4->setEnabled(true);
+    ui->bc5->setEnabled(true);
+    ui->bc6->setEnabled(true);
+    ui->bc7->setEnabled(true);
+    ui->bc8->setEnabled(true);
 }
 
 void MainWindow::setDisabledBoxes()
 {
-    ui->ac1->setDisabled(true);
-    ui->ac2->setDisabled(true);
-    ui->ac3->setDisabled(true);
-    ui->ac4->setDisabled(true);
-    ui->ac5->setDisabled(true);
-    ui->ac6->setDisabled(true);
-    ui->ac7->setDisabled(true);
-    ui->ac8->setDisabled(true);
-    ui->dc1->setDisabled(true);
-    ui->dc2->setDisabled(true);
-    ui->dc3->setDisabled(true);
-    ui->dc4->setDisabled(true);
-    ui->dc5->setDisabled(true);
-    ui->dc6->setDisabled(true);
-    ui->dc7->setDisabled(true);
-    ui->dc8->setDisabled(true);
+    ui->lc1->setDisabled(true);
+    ui->lc2->setDisabled(true);
+    ui->lc3->setDisabled(true);
+    ui->lc4->setDisabled(true);
+    ui->lc5->setDisabled(true);
+    ui->lc6->setDisabled(true);
+    ui->lc7->setDisabled(true);
+    ui->lc8->setDisabled(true);
+    ui->bc1->setDisabled(true);
+    ui->bc2->setDisabled(true);
+    ui->bc3->setDisabled(true);
+    ui->bc4->setDisabled(true);
+    ui->bc5->setDisabled(true);
+    ui->bc6->setDisabled(true);
+    ui->bc7->setDisabled(true);
+    ui->bc8->setDisabled(true);
 }
 
 void MainWindow::needUpdate()
@@ -148,6 +151,77 @@ void MainWindow::needUpdate()
 void MainWindow::newGeneration(bool)
 {
     emit(nextGeneration(true));
+}
+
+void MainWindow::check(bool)
+{
+    birth = 0;
+    life = 0;
+    if (ui->lc1->isChecked() && ui->lc1->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc2->isChecked() && ui->lc2->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc3->isChecked() && ui->lc3->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc4->isChecked() && ui->lc4->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc5->isChecked() && ui->lc5->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc6->isChecked() && ui->lc6->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc7->isChecked() && ui->lc7->isEnabled())
+    {
+       life++;
+    }
+    if (ui->lc8->isChecked() && ui->lc8->isEnabled())
+    {
+       life++;
+    }
+    if (ui->bc1->isChecked() && ui->bc1->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc2->isChecked() && ui->bc2->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc3->isChecked() && ui->bc3->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc4->isChecked() && ui->bc4->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc5->isChecked() && ui->bc5->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc6->isChecked() && ui->bc6->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc7->isChecked() && ui->bc7->isEnabled())
+    {
+       birth++;
+    }
+    if (ui->bc8->isChecked() && ui->bc8->isEnabled())
+    {
+       birth++;
+    }
+    emit(needCheck(birth, life));
 }
 
 int MainWindow::interval()

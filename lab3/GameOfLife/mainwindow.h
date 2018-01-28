@@ -33,9 +33,11 @@ signals:
     void iterInterValueChanged(int);
     void heightContValueChanged(int);
     void widthContValueChanged(int);
+    void needCheck(int, int);
 
 public slots:
     void newGeneration(bool);
+    void check(bool);
     void selectMasterColor();
     void startGame();
     void stopGame();
@@ -70,6 +72,8 @@ private:
     Ui::MainWindow *ui;
     QColor currentColor;
     RenderArea *field;
+    int birth;
+    int life;
 };
 
 #endif // MAINWINDOW_H

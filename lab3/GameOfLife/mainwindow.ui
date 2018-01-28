@@ -85,69 +85,69 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>If Alive</string>
+           <string>For Life</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="aliveCells1">
+         <layout class="QHBoxLayout" name="lifeCells1">
           <item>
-           <widget class="QCheckBox" name="ac1">
+           <widget class="QCheckBox" name="lc1">
             <property name="text">
-             <string>ac1</string>
+             <string>1</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac2">
+           <widget class="QCheckBox" name="lc2">
             <property name="text">
-             <string>ac2</string>
+             <string>2</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac3">
+           <widget class="QCheckBox" name="lc3">
             <property name="text">
-             <string>ac3</string>
+             <string>3</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac4">
+           <widget class="QCheckBox" name="lc4">
             <property name="text">
-             <string>ac4</string>
+             <string>4</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="aliveCells2">
+         <layout class="QHBoxLayout" name="lifeCells2">
           <item>
-           <widget class="QCheckBox" name="ac5">
+           <widget class="QCheckBox" name="lc5">
             <property name="text">
-             <string>ac5</string>
+             <string>5</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac6">
+           <widget class="QCheckBox" name="lc6">
             <property name="text">
-             <string>ac6</string>
+             <string>6</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac7">
+           <widget class="QCheckBox" name="lc7">
             <property name="text">
-             <string>ac7</string>
+             <string>7</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ac8">
+           <widget class="QCheckBox" name="lc8">
             <property name="text">
-             <string>ac8</string>
+             <string>8</string>
             </property>
            </widget>
           </item>
@@ -156,69 +156,69 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>If Dead</string>
+           <string>For Birth</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="deadCells1">
+         <layout class="QHBoxLayout" name="birthCells1">
           <item>
-           <widget class="QCheckBox" name="dc1">
+           <widget class="QCheckBox" name="bc1">
             <property name="text">
-             <string>dc1</string>
+             <string>1</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc2">
+           <widget class="QCheckBox" name="bc2">
             <property name="text">
-             <string>dc2</string>
+             <string>2</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc3">
+           <widget class="QCheckBox" name="bc3">
             <property name="text">
-             <string>dc3</string>
+             <string>3</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc4">
+           <widget class="QCheckBox" name="bc4">
             <property name="text">
-             <string>dc4</string>
+             <string>4</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="deadCells2">
+         <layout class="QHBoxLayout" name="birthCells2">
           <item>
-           <widget class="QCheckBox" name="dc5">
+           <widget class="QCheckBox" name="bc5">
             <property name="text">
-             <string>dc5</string>
+             <string>5</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc6">
+           <widget class="QCheckBox" name="bc6">
             <property name="text">
-             <string>dc6</string>
+             <string>6</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc7">
+           <widget class="QCheckBox" name="bc7">
             <property name="text">
-             <string>dc7</string>
+             <string>7</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="dc8">
+           <widget class="QCheckBox" name="bc8">
             <property name="text">
-             <string>dc8</string>
+             <string>8</string>
             </property>
            </widget>
           </item>
@@ -253,7 +253,7 @@
              <number>2</number>
             </property>
             <property name="maximum">
-             <number>3000</number>
+             <number>500</number>
             </property>
             <property name="value">
              <number>50</number>
@@ -269,7 +269,7 @@
              <number>2</number>
             </property>
             <property name="maximum">
-             <number>3000</number>
+             <number>500</number>
             </property>
             <property name="value">
              <number>50</number>

@@ -19,6 +19,7 @@ protected:
 signals:
     void environmentChanged(bool ok);
     void nextGeneration(bool ok);
+    void needCheck(bool ok);
 
 public slots:
     void startGame();
@@ -46,6 +47,7 @@ private slots:
     void paintGrid(QPainter &p);
     void paintUniverse(QPainter &p);
     void newGeneration();
+    void check();
 
 private:
     QColor m_masterColor;

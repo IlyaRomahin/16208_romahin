@@ -18,6 +18,7 @@ RenderArea::RenderArea(QWidget *parent) :
 {
     timer->setInterval(100);
     m_masterColor = "#000";
+    connect(timer, SIGNAL(timeout()), this, SLOT(check()));
     connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
     universe.resize(((height_ + 2) * (width_ + 2)), bool());
     next.resize(((height_ + 2) * (width_ + 2)), bool());
@@ -77,6 +78,11 @@ void RenderArea::needUpdate()
 void RenderArea::newGeneration()
 {
     emit(nextGeneration(true));
+}
+
+void RenderArea::check()
+{
+    emit(needCheck(true));
 }
 
 int RenderArea::interval()

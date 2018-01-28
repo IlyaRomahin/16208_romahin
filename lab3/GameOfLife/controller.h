@@ -37,6 +37,7 @@ public slots:
 
 private slots:
     void newGeneration(bool);
+    void check(int, int);
     void finishGame(bool);
     void lostGame(bool);
     void needUpdate(bool);
