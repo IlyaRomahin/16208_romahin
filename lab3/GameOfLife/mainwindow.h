@@ -52,6 +52,7 @@ public slots:
     void setMasterColor(const QColor &color);
     void setNext(std::vector<bool> &n);
     void setUniverse(std::vector<bool> &u);
+    void setRule(std::string fRule);
     void setEnabledSpinBoxes();
     void setEnabledBoxes();
     void setDisabledBoxes();
@@ -68,6 +69,8 @@ public slots:
     void iterInter(int it);
     void heightCont(int h);
     void widthCont(int w);
+    void setCellsWidth(int cw);
+    void setCellsHeight(int ch);
 
     
 private:

@@ -151,34 +151,46 @@ std::string Model::dump()
                 count++;
             }
         }
-        if (k != height)
+        if (k == height)
         {
-            master += "$";
-        } else {
+            master += std::to_string(count);
+            master += temp;
             master += "!";
         }
     }
     return master;
 }
 
-void Model::setDump(const std::string &data)
+void Model::setDump(const std::string &dump)
 {
-    std::ifstream file(data);
-    std::string article;
-    std::string field;
-    std::getline(file, article);
-    std::getline(file, field);
-    int current = 0;
-    for(int k = 1; k <= height; k++) {
-        for(int j = 1; j <= width; j++) {
-            if (data[current] == 'o')
-            {
-                universe[k * width + j] = true;
-            }
-            else universe[k * width + j] = false;
-            current++;
+    int i = 0;
+    int tmp = 0;
+    int j = width + 1;
+    while (dump[i] != '!')
+    {
+        if ('0' <= dump[i] && dump[i] <= '9')
+        {
+            tmp = tmp * 10 + (dump[i] - '0');
         }
-        current++;
+        if (dump[i] == 'o')
+        {
+            while (tmp != 0)
+            {
+                universe[j] = true;
+                j++;
+                tmp--;
+            }
+        }
+        if (dump[i] == 'b')
+        {
+            while (tmp != 0)
+            {
+                universe[j] = false;
+                j++;
+                tmp--;
+            }
+        }
+        i++;
     }
 }
 

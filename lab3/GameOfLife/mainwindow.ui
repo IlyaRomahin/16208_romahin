@@ -250,7 +250,7 @@
              <string> cells</string>
             </property>
             <property name="minimum">
-             <number>2</number>
+             <number>10</number>
             </property>
             <property name="maximum">
              <number>500</number>
@@ -266,7 +266,7 @@
              <string> cells</string>
             </property>
             <property name="minimum">
-             <number>2</number>
+             <number>10</number>
             </property>
             <property name="maximum">
              <number>500</number>

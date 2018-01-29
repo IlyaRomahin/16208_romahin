@@ -9,6 +9,7 @@
 #include <QColor>
 #include <QColorDialog>
 #include <QMessageBox>
+#include <iostream>
 
 Controller::Controller(QWidget *parent, Model *m, MainWindow *w) :
     QWidget(parent),
@@ -204,30 +205,24 @@ void Controller::loadGame(bool)
     {
         return;
     }
-//    QTextStream in(&file);
-
-//    int sv;
-//    in >> sv;
-//    view->cellsControl->setValue(sv);
-
-//    game->setCellNumber(sv);
-//    QString dump="";
-//    for(int k=0; k != sv; k++) {
-//        QString t;
-//        in >> t;
-//        dump.append(t+"\n");
-//    }
-//    game->setDump(dump);
-
-//    int r,g,b; // RGB color
-//    in >> r >> g >> b;
-//    currentColor = QColor(r,g,b);
-//    game->setMasterColor(currentColor); // sets color of the dots
-//    QPixmap icon(16, 16); // icon on the button
-//    icon.fill(currentColor); // fill with new color
-//    view->colorButton->setIcon( QIcon(icon) ); // set icon for button
-//    in >> r; // r will be interval number
-//    view->iterInterval->setValue(r);
-//    game->setInterval(r);
+    QTextStream in(&file);
+    QString articleQ = in.readLine();
+    std::string article = articleQ.toStdString();
+    std::size_t foundx = article.find(" y = ");
+    std::size_t foundy = article.find(" rule = ");
+    std::string cws = article.substr(4, foundx - 4);
+    std::string chs = article.substr(foundx + 5, foundy - 11);
+    std::string fRule = article.substr(foundy + 8, article.length());
+    std::cout << cws << std::endl;
+    std::cout << chs << std::endl;
+    std::cout << fRule << std::endl;
+    int cw = std::stoi(cws);
+    int ch = std::stoi(chs);
+    view->setCellsWidth(cw);
+    view->setCellsHeight(ch);
+    view->setRule(fRule);
+    QString dumpQ = in.readLine();
+    std::string dump = dumpQ.toStdString();
+    model->setDump(dump);
     needUpdate(true);
 }

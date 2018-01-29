@@ -62,11 +62,15 @@ MainWindow::~MainWindow()
 void MainWindow::startGame()
 {
     field->startGame();
+    ui->saveButton->setDisabled(true);
+    ui->loadButton->setDisabled(true);
 }
 
 void MainWindow::stopGame()
 {
     field->stopGame();
+    ui->saveButton->setEnabled(true);
+    ui->loadButton->setEnabled(true);
 }
 
 std::vector<bool> &MainWindow::getUniverse()
@@ -87,6 +91,13 @@ void MainWindow::setNext(std::vector<bool> &n)
 void MainWindow::setUniverse(std::vector<bool> &u)
 {
     field->setUniverse(u);
+}
+
+void MainWindow::setRule(std::string fRule)
+{
+    QString rule = QString::fromStdString(fRule);
+    ui->rulesControl->setCurrentText(rule);
+    rulesCont(rule);
 }
 
 void MainWindow::setHeight(const int h)
@@ -285,6 +296,18 @@ void MainWindow::rulesCont(QString r)
 void MainWindow::iterInter(int it)
 {
     emit(iterInterValueChanged(it));
+}
+
+void MainWindow::setCellsWidth(int cw)
+{
+    ui->widthControl->setValue(cw);
+    emit(widthContValueChanged(cw));
+}
+
+void MainWindow::setCellsHeight(int ch)
+{
+    ui->heightControl->setValue(ch);
+    emit(heightContValueChanged(ch));
 }
 
 void MainWindow::heightCont(int h)
