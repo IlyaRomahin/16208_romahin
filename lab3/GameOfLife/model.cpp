@@ -113,30 +113,46 @@ void Model::resetUniverse()
 
 std::string Model::dump()
 {
-    bool flag = true;
+    bool flag = false;
     char temp;
     int count = 0;
     std::string master = "";
+    if (universe[width + 1] == true)
+    {
+        temp = 'o';
+        flag = true;
+        count++;
+    }
+    if (universe[width + 1] == false)
+    {
+        temp = 'b';
+        flag = false;
+        count++;
+    }
     for (int k = 1; k <= height; k++) {
         for (int j = 1; j <= width; j++) {
-            if ((universe[k * width + j] == true && !flag) || (universe[k * width + j] == false && flag)) {
+            if ((universe[k * width + j] == true && !flag) || (universe[k * width + j] == false && flag))
+            {
                 master += std::to_string(count);
                 master += temp;
+                flag = !flag;
                 count = 0;
             }
-            if (universe[k * width + j] == true) {
+            if (universe[k * width + j] == true && flag && (k * width + j) != (width + 1))
+            {
                 temp = 'o';
                 flag = true;
                 count++;
-
             }
-            if (universe[k * width + j] == false) {
+            if (universe[k * width + j] == false && !flag && (k * width + j) != (width + 1))
+            {
                 temp = 'b';
                 flag = false;
                 count++;
             }
         }
-        if (k != height){
+        if (k != height)
+        {
             master += "$";
         } else {
             master += "!";

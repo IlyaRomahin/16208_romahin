@@ -32,8 +32,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadBut()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveBut()));
 
+    connect(field, SIGNAL(environmentChanged(bool)), this, SLOT(updateModel(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->heightControl, SLOT(setDisabled(bool)));
     connect(field, SIGNAL(environmentChanged(bool)), ui->widthControl, SLOT(setDisabled(bool)));
+    connect(field, SIGNAL(environmentChanged(bool)), ui->colorButton, SLOT(setDisabled(bool)));
     connect(field, &RenderArea::nextGeneration, [this](bool b){newGeneration(b);});
     connect(field, &RenderArea::needCheck, [this](bool b){check(b);});
 
@@ -101,6 +103,7 @@ void MainWindow::setEnabledSpinBoxes()
 {
     ui->widthControl->setEnabled(true);
     ui->heightControl->setEnabled(true);
+    ui->colorButton->setEnabled(true);
 }
 
 void MainWindow::setEnabledBoxes()
@@ -146,6 +149,11 @@ void MainWindow::setDisabledBoxes()
 void MainWindow::needUpdate()
 {
     field->needUpdate();
+}
+
+void MainWindow::updateModel(bool)
+{
+    emit(environmentChanged(true));
 }
 
 void MainWindow::newGeneration(bool)

@@ -27,6 +27,7 @@ Controller::Controller(QWidget *parent, Model *m, MainWindow *w) :
     connect(view, &MainWindow::saveButclicked, [this](bool b){saveGame(b);});
 
     connect(view, &MainWindow::nextGeneration, [this](bool b){newGeneration(b);});
+    connect(view, &MainWindow::environmentChanged, [this](bool b){updateModel(b);});
     connect(view, &MainWindow::needCheck, [this](int birth, int life){check(birth, life);});
     connect(model, &Model::finishGame, [this](bool b){finishGame(b);});
     connect(model, &Model::lostGame, [this](bool b){lostGame(b);});
@@ -64,6 +65,12 @@ void Controller::needUpdate(bool)
     view->setNext(model->getNext());
     view->setUniverse(model->getUniverse());
     view->needUpdate();
+}
+
+void Controller::updateModel(bool)
+{
+    model->setUniverse(view->getUniverse());
+    model->setNext(view->getNext());
 }
 
 void Controller::myRule(bool)

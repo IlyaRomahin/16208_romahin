@@ -41,6 +41,7 @@ private slots:
     void finishGame(bool);
     void lostGame(bool);
     void needUpdate(bool);
+    void updateModel(bool);
 
 private:
     Model *model;

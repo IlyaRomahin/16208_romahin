@@ -21,6 +21,7 @@ public:
     ~MainWindow();
 
 signals:
+    void environmentChanged(bool ok);
     void nextGeneration(bool ok);
     void startButclicked(bool ok);
     void stopButclicked(bool ok);
@@ -54,6 +55,7 @@ public slots:
     void setEnabledSpinBoxes();
     void setEnabledBoxes();
     void setDisabledBoxes();
+    void updateModel(bool);
     void needUpdate();
     void startBut();
     void stopBut();

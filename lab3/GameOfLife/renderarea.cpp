@@ -111,7 +111,6 @@ void RenderArea::paintEvent(QPaintEvent *)
 
 void RenderArea::mousePressEvent(QMouseEvent *e)
 {
-    emit(environmentChanged(true));
     double cellWidth = (double)width() / width_;
     double cellHeight = (double)height() / height_;
     int k = 0;
@@ -128,6 +127,7 @@ void RenderArea::mousePressEvent(QMouseEvent *e)
     {
         universe[k * width_ + j] = !universe[k * width_ + j];
     }
+    emit(environmentChanged(true));
     update();
 }
 
