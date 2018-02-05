@@ -29,7 +29,7 @@ Controller::Controller(QWidget *parent, Model *m, MainWindow *w) :
 
     connect(view, &MainWindow::nextGeneration, [this](bool b){newGeneration(b);});
     connect(view, &MainWindow::environmentChanged, [this](bool b){updateModel(b);});
-    connect(view, &MainWindow::needCheck, [this](int birth, int life){check(birth, life);});
+    connect(view, &MainWindow::needCheck, [this](std::vector<bool> birth, std::vector<bool> life){check(birth, life);});
     connect(model, &Model::finishGame, [this](bool b){finishGame(b);});
     connect(model, &Model::lostGame, [this](bool b){lostGame(b);});
     connect(model, &Model::needUpdate, [this](bool b){needUpdate(b);});
@@ -142,7 +142,7 @@ void Controller::newGeneration(bool)
     model->newGeneration();
 }
 
-void Controller::check(int birth, int life)
+void Controller::check(std::vector<bool> birth, std::vector<bool> life)
 {
     model->setBirth(birth);
     model->setLife(life);

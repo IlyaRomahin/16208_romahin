@@ -34,7 +34,7 @@ signals:
     void iterInterValueChanged(int);
     void heightContValueChanged(int);
     void widthContValueChanged(int);
-    void needCheck(int, int);
+    void needCheck(std::vector<bool>, std::vector<bool>);
 
 public slots:
     void newGeneration(bool);
@@ -74,11 +74,11 @@ public slots:
 
     
 private:
+    std::vector<bool> life;
+    std::vector<bool> birth;
     Ui::MainWindow *ui;
     QColor currentColor;
     RenderArea *field;
-    int birth;
-    int life;
 };
 
 #endif // MAINWINDOW_H

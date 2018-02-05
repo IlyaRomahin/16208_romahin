@@ -10,9 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     currentColor(QColor("#000")),
-    field(new RenderArea(this)),
-    birth(0),
-    life(0)
+    field(new RenderArea(this))
 {
     ui->setupUi(this);
 
@@ -56,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete field;
 }
 
 void MainWindow::startGame()
@@ -174,71 +171,73 @@ void MainWindow::newGeneration(bool)
 
 void MainWindow::check(bool)
 {
-    birth = 0;
-    life = 0;
+    life.clear();
+    birth.clear();
+    life.resize(8, bool());
+    birth.resize(8, bool());
     if (ui->lc1->isChecked() && ui->lc1->isEnabled())
     {
-       life++;
+       life[0] = true;
     }
     if (ui->lc2->isChecked() && ui->lc2->isEnabled())
     {
-       life++;
+       life[1] = true;
     }
     if (ui->lc3->isChecked() && ui->lc3->isEnabled())
     {
-       life++;
+       life[2] = true;
     }
     if (ui->lc4->isChecked() && ui->lc4->isEnabled())
     {
-       life++;
+       life[3] = true;
     }
     if (ui->lc5->isChecked() && ui->lc5->isEnabled())
     {
-       life++;
+       life[4] = true;
     }
     if (ui->lc6->isChecked() && ui->lc6->isEnabled())
     {
-       life++;
+       life[5] = true;
     }
     if (ui->lc7->isChecked() && ui->lc7->isEnabled())
     {
-       life++;
+       life[6] = true;
     }
     if (ui->lc8->isChecked() && ui->lc8->isEnabled())
     {
-       life++;
+       life[7] = true;
     }
     if (ui->bc1->isChecked() && ui->bc1->isEnabled())
     {
-       birth++;
+       birth[0] = true;
     }
     if (ui->bc2->isChecked() && ui->bc2->isEnabled())
     {
-       birth++;
+       birth[1] = true;
     }
     if (ui->bc3->isChecked() && ui->bc3->isEnabled())
     {
-       birth++;
+       birth[2] = true;
     }
     if (ui->bc4->isChecked() && ui->bc4->isEnabled())
     {
-       birth++;
+       birth[3] = true;
     }
     if (ui->bc5->isChecked() && ui->bc5->isEnabled())
     {
-       birth++;
+       birth[4] = true;
     }
     if (ui->bc6->isChecked() && ui->bc6->isEnabled())
     {
-       birth++;
+       birth[5] = true;
     }
     if (ui->bc7->isChecked() && ui->bc7->isEnabled())
     {
-       birth++;
+       birth[6] = true;
     }
     if (ui->bc8->isChecked() && ui->bc8->isEnabled())
     {
-       birth++;
+       birth[7] = true;
     }
     emit(needCheck(birth, life));
 }

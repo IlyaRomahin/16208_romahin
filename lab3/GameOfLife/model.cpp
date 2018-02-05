@@ -8,8 +8,6 @@ Model::Model(QWidget *parent) :
     generations(-1),
     height(50),
     width(50),
-    birth(0),
-    life(0),
     rule("Conway`s")
 {
     universe.resize(((height + 2) * (width + 2)), bool());
@@ -21,13 +19,17 @@ Model::~Model()
 
 }
 
-void Model::setBirth(const int b)
+void Model::setBirth(const std::vector<bool> b)
 {
+    birth.clear();
+    birth.resize(8, bool());
     birth = b;
 }
 
-void Model::setLife(const int l)
+void Model::setLife(const std::vector<bool> l)
 {
+    life.clear();
+    life.resize(8, bool());
     life = l;
 }
 
@@ -227,10 +229,24 @@ bool Model::isAlive(int k, int j)
     {
         return true;
     }
-    if (rule == "My rule" && (birth != 0 && life != 0) &&
-       (((universe[k * width + j] == true) && (power == life)) || (power == birth)))
-    {
-        return true;
+    if (rule == "My rule"){
+        for (int i = 0; i < 8; ++i)
+        {
+            if (life[i])
+            {
+                if ((universe[k * width + j] == true) && power == (i + 1))
+                {
+                    return true;
+                }
+            }
+            if (birth[i])
+            {
+                if (power == (i + 1))
+                {
+                    return true;
+                }
+            }
+        }
     }
     return false;
 }

@@ -34,17 +34,17 @@ public:
     std::vector<bool> &getUniverse();
     void setUniverse(std::vector<bool> &u);
     void setNext(std::vector<bool> &n);
-    void setBirth(const int b);
-    void setLife(const int l);
+    void setBirth(const std::vector<bool> b);
+    void setLife(const std::vector<bool> l);
 
 private:
     int generations;
     std::vector<bool> universe;
     std::vector<bool> next;
+    std::vector<bool> birth;
+    std::vector<bool> life;
     int height;
     int width;
-    int birth;
-    int life;
     std::string rule;
     bool isAlive(int k, int j);
     void resetUniverse();
