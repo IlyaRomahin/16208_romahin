@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class BrainFuckInterpreter {
 	public void interprete(String fileName) {
@@ -11,18 +11,17 @@ public class BrainFuckInterpreter {
 					continue;
 				}
 				Command cmd = Factory.instance().get(String.valueOf(ch));
-				commandVec.addElement(cmd);
+				commandVec.add(cmd);
 			}
-			for (commandPtr = 0; commandPtr < commandVec.size(); ++commandPtr) {
-				commandVec.elementAt(commandPtr).execute(executionCo);
-			}
-
 		}
-		catch(Exception ex){}	
+		catch(Exception ex){}
+		for (commandPtr = 0; commandPtr < commandVec.size(); ++commandPtr) {
+			commandVec.get(commandPtr).execute(executionCo);
+		}	
 	}
-	class ExecutionCont implements ExecutionContext {
+	class ExecutionContextImple implements ExecutionContext {
 		public void setElement(byte value, int elementNumber) {
-			environment[(elementNumber + memorySize) % memorySize] = (byte)value;
+			environment[(elementNumber + memorySize) % memorySize] = value;
 		}
 		public byte getElement(int elementNumber) {
 			return environment[(elementNumber + memorySize) % memorySize];
@@ -46,14 +45,14 @@ public class BrainFuckInterpreter {
 			return commandPtr;
 		}
 		public String getCommand(int elementNumber) {
-			return commandVec.elementAt(elementNumber % commandVec.size()).toString();
+			return commandVec.get(elementNumber % commandVec.size()).toString();
 		}
 	}
 	private int memorySize = 30000;
 	private int ptr = 0;
 	private byte environment[] = new byte[memorySize];
 	private int commandPtr = 0;
-	private Vector<Command> commandVec = new Vector<>();
+	private ArrayList<Command> commandVec = new ArrayList<>();
 	private int loopIndex = 0;
-	private ExecutionContext executionCo = new ExecutionCont();
+	private ExecutionContextImple executionCo = new ExecutionContextImple();
 }

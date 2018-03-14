@@ -1,6 +1,6 @@
 public class Main {
 	@SuppressWarnings("rawtypes")
-	public static void main(java.lang.String[] args){
+	public static void main(java.lang.String[] args) {
 		try {
 			if (args.length == 0) {
 				java.lang.System.out.println("Wrong number of arguments!1!");

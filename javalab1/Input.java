@@ -1,7 +1,13 @@
+import java.io.*;
+
 public class Input implements Command {
 	public Input() {}
 	@Override
 	public void execute(ExecutionContext exc) {
-		java.lang.System.out.println("Input is executing!1!");
+		try {
+			char ch = (char)System.in.read();
+			exc.setElement((byte)ch, exc.getPtr());
+		}
+		catch(IOException ioe) {}
 	}
 }
